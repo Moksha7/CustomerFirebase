@@ -1,4 +1,4 @@
-package com.example.customerfirebase
+package com.example.customerfirebase.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.customerfirebase.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
