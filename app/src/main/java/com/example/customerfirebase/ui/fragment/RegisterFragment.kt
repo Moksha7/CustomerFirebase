@@ -40,9 +40,10 @@ class RegisterFragment : Fragment() {
                 val id = tietRegisterKey.text.toString()
                 val pass = tietRegisterPassword.text.toString()
                 val name = tietRegisterName.text.toString()
-                viewModel.insertCustIdIntoRoomDB("111112")
-                viewModel.insertCustIdIntoFireStore("111112")
+                //viewModel.insertCustIdIntoRoomDB("111113")
+                //viewModel.insertCustIdIntoFireStore("111113")
                 viewModel.checkCustIdIntoRoomDB(id, name, pass)
+                viewModel.checkCustIdIntoFireStore(id, name, pass)
             }
 
             tvRegisterLoginnow.setOnClickListener {

@@ -37,7 +37,7 @@ constructor(
         val cId = dbRepository.getCustomerById(id)
         if (cId != null) {
             insertCustDataIntoRoomDB(id, name, pass)
-            insertCustDataIntoFireStore(id, name, pass)
+            //insertCustDataIntoFireStore(id, name, pass)
             Log.d("LoginFragment", "User is valid")
         } else {
             Log.d("LoginFragment", "User is not valid")
@@ -84,25 +84,45 @@ constructor(
     }
 
     fun checkCustIdIntoFireStore(id: String, name: String, pass: String) {
-        firebaseFireStore.collection("customer").whereEqualTo("cid", id).get()
-
-        /*if(cid!=null){
-            Log.d("LoginFragment","User is not valid")
-        }else{
-            insertCustDataIntoFireStore(id,name,pass)
-            Log.d("LoginFragment","User is valid")
-        }*/
+        val custIdRef = firebaseFireStore.collection("customer")
+        custIdRef.document(id).get().addOnSuccessListener { document ->
+            if (document != null) {
+                Log.d("LoginFragment", "Document Snapshot Data: ${document.data}")
+                val ccid = document.getString("cid")
+                if (ccid == id) {
+                    insertCustDataIntoFireStore(id, name, pass)
+                    Log.d("LoginFragment", "User Valid")
+                } else {
+                    Log.d("LoginFragment", "User not Valid")
+                }
+            } else {
+                Log.d("LoginFragment", "No such Document Snapshot")
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("LoginFragment", "get failed with", exception)
+        }
     }
 
     fun checkLoginDataIntoFireStore(id: String, pass: String) {
         val custLoginRef = firebaseFireStore.collection("customerData")
-        val cid = custLoginRef.whereEqualTo("cid", id)
-        val cpass = custLoginRef.whereEqualTo("cpass", pass)
-        if (cid != null && cpass != null) {
-            Log.d("LoginFragment", "User is Valid")
-        } else {
-            Log.d("LoginFragment", "User is not valid")
+
+        custLoginRef.document(id).get().addOnSuccessListener { document ->
+            if (document != null) {
+                Log.d("LoginFragment", "Document Snapshot Data: ${document.data}")
+                val ccid = document.getString("cid")
+                val ccpass = document.getString("cpass")
+                if (ccid == id && ccpass == pass) {
+                    Log.d("LoginFragment", "User Valid")
+                } else {
+                    Log.d("LoginFragment", "User not Valid")
+                }
+            } else {
+                Log.d("LoginFragment", "No such Document Snapshot")
+            }
+        }.addOnFailureListener { exception ->
+            Log.d("LoginFragment", "get failed with", exception)
         }
+
     }
 
 }
