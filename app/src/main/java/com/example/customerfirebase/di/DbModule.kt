@@ -19,7 +19,7 @@ object DbModule {
     @Provides
     fun provideCustomerDb(@ApplicationContext context: Context): CustomerDatabase {
         return Room.databaseBuilder(context, CustomerDatabase::class.java,
-            DB_NAME).build()
+            DB_NAME).allowMainThreadQueries().build()
     }
 
     @Singleton

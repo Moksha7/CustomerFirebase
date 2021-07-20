@@ -1,92 +1,108 @@
 package com.example.customerfirebase.viewmodel
 
+import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.customerfirebase.utils.FirebaseQueryLiveData
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.example.customerfirebase.db.DbRepository
+import com.example.customerfirebase.model.Customer
+import com.example.customerfirebase.model.CustomerData
+import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
 
-class FirebaseViewModel : ViewModel() {
-    private val cust_id_ref = FirebaseDatabase.getInstance().getReference("/custId")
-    private val cust_ref = FirebaseDatabase.getInstance().getReference("/custName")
+@HiltViewModel
+class FirebaseViewModel @Inject
+constructor(
+    @ApplicationContext private val context: Context,
+    private val dbRepository: DbRepository,
+    private val firebaseFireStore: FirebaseFirestore,
+) : ViewModel() {
 
 
-    private val custIdLiveData: FirebaseQueryLiveData = FirebaseQueryLiveData(cust_id_ref)
-    private val custLiveData: FirebaseQueryLiveData = FirebaseQueryLiveData(cust_ref)
-
-    fun getCustIdDataSnapshotLiveData(): LiveData<DataSnapshot?> {
-        return custIdLiveData
+    fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
+        val customerData = CustomerData(id, name, pass)
+        dbRepository.insertCustomer(customerData)
+        Log.d("LoginFragment", "Cust data added")
     }
 
-    fun getCustDataSnapshotLiveData(): LiveData<DataSnapshot?> {
-        return custLiveData
+    fun insertCustIdIntoRoomDB(id: String) {
+        val cId = Customer(id)
+        dbRepository.insertCustId(cId)
+        Log.d("LoginFragment", "cust id added")
     }
 
-
-    fun insertDataIntoFireStore(id: String, name: String, pass: String) {
-        val customerListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-               // val customer = Customer(id, name, pass)
-                // Get Post object and use the values to update the UI
-                // cust_ref.setValue(customer)
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
+    fun checkCustIdIntoRoomDB(id: String, name: String, pass: String) {
+        val cId = dbRepository.getCustomerById(id)
+        if (cId != null) {
+            insertCustDataIntoRoomDB(id, name, pass)
+            insertCustDataIntoFireStore(id, name, pass)
+            Log.d("LoginFragment", "User is valid")
+        } else {
+            Log.d("LoginFragment", "User is not valid")
         }
-        cust_ref.addValueEventListener(customerListener)
+    }
+
+    fun insertCustDataIntoFireStore(id: String, name: String, pass: String) {
+        val customerData = hashMapOf(
+            "cid" to id,
+            "cname" to name,
+            "cpass" to pass
+        )
+
+        firebaseFireStore.collection("customerData").document(id)
+            .set(customerData)
+            .addOnCompleteListener {
+                Log.d("LoginFragment",
+                    "DocumentSnapshot custData successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Log.d("LoginFragment",
+                    "Error writing custData document",
+                    e)
+            }
     }
 
 
-    fun checkDataFromFireStore(cId: String, cPass: String) {
-        cust_ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+    fun insertCustIdIntoFireStore(id: String) {
+        val customerId = hashMapOf(
+            "cid" to id
+        )
 
-                val id = snapshot.child("cid").getValue(String::class.java)
-                val name = snapshot.child("cname").getValue(String::class.java)
-                val pass = snapshot.child("cpass").getValue(String::class.java)
-                if (id == cId && pass == cPass) {
-                    Log.d("LoginFragment", "value same" + id + cId)
-                } else {
-                    Log.d("LoginFragment", "Value not same")
-                }
+        firebaseFireStore.collection("customer").document(id)
+            .set(customerId)
+            .addOnCompleteListener {
+                Log.d("LoginFragment",
+                    "DocumentSnapshot custId successfully written!")
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("firebase", "onCancelled ${error.message}")
+            .addOnFailureListener { e ->
+                Log.d("LoginFragment",
+                    "Error writing custId document",
+                    e)
             }
-        })
-
     }
 
-    fun checkCustIdFromFireStore(cId: String, cPass: String, cName: String) {
-        cust_ref.child("cid").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.e("firebase", "onDataChange ${snapshot.value.toString()}")
-                Log.d("LoginFragment", snapshot.value.toString())
+    fun checkCustIdIntoFireStore(id: String, name: String, pass: String) {
+        firebaseFireStore.collection("customer").whereEqualTo("cid", id).get()
 
-                val id = snapshot.getValue(String::class.java)
-
-                if (id == cId) {
-                    insertDataIntoFireStore(cId, cName, cPass)
-                    Log.d("LoginFragment", "Customer Valid" + id + snapshot.value.toString())
-                } else {
-                    Log.d("LoginFragment", "Customer Not Valid" + "Value not same")
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("firebase", "onCancelled ${error.message}")
-            }
-        })
+        /*if(cid!=null){
+            Log.d("LoginFragment","User is not valid")
+        }else{
+            insertCustDataIntoFireStore(id,name,pass)
+            Log.d("LoginFragment","User is valid")
+        }*/
     }
 
+    fun checkLoginDataIntoFireStore(id: String, pass: String) {
+        val custLoginRef = firebaseFireStore.collection("customerData")
+        val cid = custLoginRef.whereEqualTo("cid", id)
+        val cpass = custLoginRef.whereEqualTo("cpass", pass)
+        if (cid != null && cpass != null) {
+            Log.d("LoginFragment", "User is Valid")
+        } else {
+            Log.d("LoginFragment", "User is not valid")
+        }
+    }
 
 }
