@@ -144,10 +144,10 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!--btn_register_login-->
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/btn_register_login"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_medium"
         android:layout_marginEnd="@dimen/margin_large"
@@ -161,7 +161,7 @@
         app:layout_constraintTop_toBottomOf="@+id/til_register_password" />
 
     <!--tv_register_loginnow-->
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/tv_register_loginnow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

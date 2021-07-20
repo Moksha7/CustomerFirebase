@@ -6,24 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.customerfirebase.databinding.FragmentLoginBinding
-import com.example.customerfirebase.model.Customer
-import com.google.firebase.database.*
+import com.example.customerfirebase.viewmodel.FirebaseViewModel
+import com.google.firebase.database.DataSnapshot
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    var firebaseDatabase: FirebaseDatabase? = null
-
-    // creating a variable for our Database
-    // Reference for Firebase.
-    var custbaseReference: DatabaseReference? = null
-    var databaseReference: DatabaseReference? = null
-    var custId: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,66 +34,55 @@ class LoginFragment : Fragment() {
             container,
             false
         )
+        val viewModel: FirebaseViewModel =
+            ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
-        firebaseDatabase = FirebaseDatabase.getInstance()
 
-        // below line is used to get reference for our database.
-        custbaseReference = firebaseDatabase!!.getReference("custId")
-        databaseReference = firebaseDatabase!!.getReference("custName")
+        val liveDataCustId: LiveData<DataSnapshot?> = viewModel.getCustIdDataSnapshotLiveData()
+        val liveDataCust: LiveData<DataSnapshot?> = viewModel.getCustDataSnapshotLiveData()
+
+        liveDataCust.observe(viewLifecycleOwner, object : Observer<DataSnapshot?> {
+            override fun onChanged(@Nullable dataSnapshot: DataSnapshot?) {
+                if (dataSnapshot != null) {
+                    // update the UI here with values in the snapshot
+                    val id = dataSnapshot.child("cid").getValue(String::class.java)
+                    val name = dataSnapshot.child("cname").getValue(String::class.java)
+                    val pass = dataSnapshot.child("cpass").getValue(String::class.java)
+                    Log.d("LoginFragment", id + name + pass)
+                }
+            }
+        })
+
+        liveDataCustId.observe(viewLifecycleOwner, object : Observer<DataSnapshot?> {
+            override fun onChanged(@Nullable dataSnapshot: DataSnapshot?) {
+                if (dataSnapshot != null) {
+                    // update the UI here with values in the snapshot
+                    val id = dataSnapshot.child("cid").getValue(String::class.java)
+                    if (id != null) {
+                        Log.d("LoginFragment", id)
+                    }
+                }
+            }
+        })
 
         binding.apply {
             btnLoginLogin.setOnClickListener {
                 Toast.makeText(context, "btnLoginClicked", Toast.LENGTH_LONG).show()
-                getDataFromFireStore()
+                val id = tietLoginCid.text.toString()
+                val pass = tietLoginPassword.text.toString()
+                viewModel.checkDataFromFireStore(id, pass)
+            }
+
+            tvLoginRegsiternow.setOnClickListener {
+                val action =
+                    LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+                findNavController().navigate(action)
             }
         }
-
         return binding.root
     }
-
-    private fun insertDataIntoFireStore() {
-        val cid: String = binding.tietLoginCid.text.toString()
-        val cpass: String = binding.tietLoginPassword.text.toString()
-
-        val customerListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val customer = Customer(cid, "abc", cpass)
-                // Get Post object and use the values to update the UI
-                databaseReference?.setValue(customer)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        }
-        databaseReference?.addValueEventListener(customerListener)
-
-    }
-
-
-    private fun getDataFromFireStore() {
-        var cid: String = binding.tietLoginCid.text.toString()
-
-        custbaseReference?.child("cid")?.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                Log.e("firebase", "onDataChange ${snapshot.value.toString()}")
-                Log.d("LoginFragment", snapshot.value.toString())
-
-                if (cid == snapshot.value.toString()) {
-                    Log.d("LoginFragment", cid + snapshot.value.toString())
-                    insertDataIntoFireStore()
-                } else {
-                    Log.d("LoginFragment", "Value not same")
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("firebase", "onCancelled ${error.message}")
-            }
-        })
-
-    }
-
-
 }
+
+
+
+
