@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.customerfirebase.databinding.FragmentRegistrationBinding
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
+import com.example.customerfirebase.viewmodel.RegisterViewModel
 import com.google.firebase.database.DataSnapshot
 
 class RegisterFragment : Fragment() {
@@ -31,6 +32,8 @@ class RegisterFragment : Fragment() {
             container,
             false
         )
+
+        binding.registration = RegisterViewModel()
 
         val viewModel: FirebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)

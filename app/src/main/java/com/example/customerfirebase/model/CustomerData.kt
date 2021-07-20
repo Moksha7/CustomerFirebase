@@ -3,12 +3,16 @@ package com.example.customerfirebase.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.firebase.firestore.IgnoreExtraProperties
 
-@IgnoreExtraProperties
 @kotlinx.parcelize.Parcelize
-@Entity
-data class Customer(
+@Entity(tableName = "customerdata")
+data class CustomerData(
     @PrimaryKey
-    var id: String = "",
+    var ccid: String = "",
+
+    val cid: String = "",
+
+    var cname: String = "",
+    var cpass: String = "",
 ) : Parcelable
+

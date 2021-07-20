@@ -3,7 +3,6 @@ package com.example.customerfirebase.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.customerfirebase.model.Customer
 import com.example.customerfirebase.utils.FirebaseQueryLiveData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,9 +30,9 @@ class FirebaseViewModel : ViewModel() {
     fun insertDataIntoFireStore(id: String, name: String, pass: String) {
         val customerListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val customer = Customer(id, name, pass)
+               // val customer = Customer(id, name, pass)
                 // Get Post object and use the values to update the UI
-                cust_ref.setValue(customer)
+                // cust_ref.setValue(customer)
 
             }
 

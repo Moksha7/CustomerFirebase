@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.customerfirebase.databinding.FragmentLoginBinding
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
+import com.example.customerfirebase.viewmodel.LoginViewModel
 import com.google.firebase.database.DataSnapshot
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,7 +38,7 @@ class LoginFragment : Fragment() {
         val viewModel: FirebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
-
+        binding.login = LoginViewModel()
         val liveDataCustId: LiveData<DataSnapshot?> = viewModel.getCustIdDataSnapshotLiveData()
         val liveDataCust: LiveData<DataSnapshot?> = viewModel.getCustDataSnapshotLiveData()
 
