@@ -3,6 +3,8 @@
     package="com.example.customerfirebase">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".CustomerApplication"
@@ -22,6 +24,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.fragment.LocationActivity" />
+        <activity android:name=".ui.MapActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCinnlDtByCEti3N2wKHKIJpvkm4b57J-4" />
+
     </application>
 
 </manifest>

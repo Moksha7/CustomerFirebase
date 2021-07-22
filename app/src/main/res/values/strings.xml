@@ -32,4 +32,13 @@
     <string name="login_successful">Login Successful!</string>
     <string name="request_canceled">Request canceled</string>
     <string name="todo">TODO</string>
+    <string name="welcome_customer">Welcome Customer</string>
+    <string name="address">Address</string>
+    <string name="village">Village</string>
+    <string name="district">District</string>
+    <string name="location">Location</string>
+    <string name="phone">Phone</string>
+    <string name="save">Save</string>
+    <string name="save_location">save Location</string>
+    <string name="get_location">get location</string>
 </resources>

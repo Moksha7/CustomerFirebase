@@ -65,6 +65,10 @@ dependencies {
     kapt "androidx.databinding:databinding-common:4.1.0"
     kapt "com.android.databinding:compiler:3.1.4"
 
+    implementation "com.google.android.libraries.places:places:2.4.0"
+
+
+
 
     // Dagger - Hilt
      implementation "com.google.dagger:hilt-android:2.36" //don't upgrade unless same version of kapt availale

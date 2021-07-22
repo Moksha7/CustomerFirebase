@@ -33,6 +33,12 @@ object AppModule {
         return firestore.collection("customerData")
     }
 
+    @Singleton
+    @Provides
+    fun provideCustomerDetailsCollectionRef(firestore: FirebaseFirestore): CollectionReference {
+        return firestore.collection("customerDetails")
+    }
+
     @Provides
     fun provideDefaultDbRepo(
         customerDao: CustomerDao,

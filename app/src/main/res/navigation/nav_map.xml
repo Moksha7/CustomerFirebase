@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/my_navMap"
+    app:startDestination="@id/customerRegistrationFragment2">
+
+
+    <fragment
+        android:id="@+id/customerRegistrationFragment2"
+        android:name="com.example.customerfirebase.ui.fragment.CustomerRegistrationFragment"
+        android:label="CustomerRegistrationFragment" />
+</navigation>

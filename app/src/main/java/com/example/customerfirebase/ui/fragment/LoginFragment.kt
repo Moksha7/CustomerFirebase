@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.customerfirebase.databinding.FragmentLoginBinding
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
@@ -18,6 +20,12 @@ class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private lateinit var navController: NavController
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +37,7 @@ class LoginFragment : Fragment() {
             container,
             false
         )
+
         val viewModel: FirebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
@@ -39,7 +48,7 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, "btnLoginClicked", Toast.LENGTH_LONG).show()
                 val id = tietLoginCid.text.toString()
                 val pass = tietLoginPassword.text.toString()
-                viewModel.checkLoginDataIntoFireStore(id, pass)
+                viewModel.checkLoginDataIntoFireStore(id, pass, navController)
             }
 
             tvLoginRegsiternow.setOnClickListener {
@@ -50,6 +59,8 @@ class LoginFragment : Fragment() {
         }
         return binding.root
     }
+
+
 }
 
 

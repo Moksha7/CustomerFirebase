@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="customerRegistration"
+            type="com.example.customerfirebase.viewmodel.CustomerRegisterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.LoginFragment">
+
+        <!--guideline_horizontal-->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+        <!--guideline_horizontal-->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/iv_login_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/todo"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/background_lightgrey_transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_horizontal" />
+
+        <ImageView
+            android:id="@+id/iv_login_firebase_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/white_border"
+            android:contentDescription="@string/todo"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/firebase_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_horizontal"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_horizontal"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tv_customer_welcomeback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_customer"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textsize_xxlarge"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical"
+            app:layout_constraintRight_toRightOf="@+id/guideline_vertical"
+            app:layout_constraintTop_toBottomOf="@+id/iv_login_firebase_logo" />
+
+        <!--til_login_email-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customer_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_customer_welcomeback">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_customer_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="@dimen/margin_small"
+                android:hint="@string/name"
+                android:inputType="text"
+                android:text="@={customerRegistration.customerName}"
+                android:textSize="@dimen/textsize_large" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customer_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_customer_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_customer_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_baseline_home_24"
+                android:drawablePadding="@dimen/margin_medium"
+                android:hint="@string/address"
+                android:inputType="textMultiLine"
+                android:text="@={customerRegistration.customerAddress}"
+                android:textSize="@dimen/textsize_large" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customer_village"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_customer_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_customer_village"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_village"
+                android:drawablePadding="@dimen/margin_medium"
+                android:hint="@string/village"
+                android:text="@={customerRegistration.customerVillage}"
+                android:textSize="@dimen/textsize_large" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customer_district"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_customer_village">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_customer_district"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_city"
+                android:drawablePadding="@dimen/margin_medium"
+                android:hint="@string/district"
+                android:text="@={customerRegistration.customerDistrict}"
+                android:textSize="@dimen/textsize_large" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customer_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_customer_district">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_customer_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_location"
+                android:drawablePadding="@dimen/margin_medium"
+                android:hint="@string/location"
+                android:text="@={customerRegistration.customerLocation}"
+                android:textSize="@dimen/textsize_large" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_customer_mobile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            app:errorEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_customer_location">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_customer_mobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="@dimen/margin_medium"
+                android:hint="@string/phone"
+                android:text="@={customerRegistration.customerMobile}"
+                android:textSize="@dimen/textsize_large" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_customer_registration"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:background="@drawable/shape_rounded_lightblue_filled_noborder"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:text="@string/save"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/textsize_large"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_customer_mobile" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

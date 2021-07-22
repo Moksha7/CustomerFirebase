@@ -2,15 +2,20 @@ package com.example.customerfirebase.viewmodel
 
 import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.customerfirebase.db.DbRepository
 import com.example.customerfirebase.model.Customer
 import com.example.customerfirebase.model.CustomerData
+import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+
+var maxid: Int = 2000
 
 @HiltViewModel
 class FirebaseViewModel @Inject
@@ -19,7 +24,6 @@ constructor(
     private val dbRepository: DbRepository,
     private val firebaseFireStore: FirebaseFirestore,
 ) : ViewModel() {
-
 
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
         val customerData = CustomerData(id, name, pass)
@@ -64,6 +68,58 @@ constructor(
             }
     }
 
+    fun insertCustomerDetailsIntoFireStore(
+        customerName: String,
+        customerAddress: String,
+        customerVillage: String,
+        customerCity: String,
+        customerLocation: String,
+        customerMobile: String,
+    ) {
+        //saveCustId(maxid.toString())
+        loadCustId()
+        val customerDetails = hashMapOf(
+            "customerId" to maxid,
+            "customerName" to customerName,
+            "customerAddress" to customerAddress,
+            "customerVillage" to customerVillage,
+            "customerCity" to customerCity,
+            "customerLocation" to customerLocation,
+            "customerMobile" to customerMobile
+        )
+
+        firebaseFireStore.collection("customerDetails").document(maxid.toString())
+            .set(customerDetails)
+            .addOnCompleteListener {
+                Log.d("LoginFragment",
+                    "DocumentSnapshot CustomerDetails successfully written!")
+                maxid = maxid + 1
+                saveCustId(maxid.toString())
+            }
+            .addOnFailureListener { e ->
+                Log.d("LoginFragment",
+                    "Error writing CustomerDetails document",
+                    e)
+            }
+
+    }
+
+    fun loadCustId() {
+        val location = "customerId"
+        val prefs = context.getSharedPreferences("CustomerId",
+            AppCompatActivity.MODE_PRIVATE)
+        val city = prefs?.getString(location, "").toString()
+        maxid = city.toInt()
+    }
+
+    fun saveCustId(cid: String?) {
+        val location = "customerId"
+        val prefs = context.getSharedPreferences("CustomerId",
+            AppCompatActivity.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putString(location, cid)
+        editor.apply()
+    }
 
     fun insertCustIdIntoFireStore(id: String) {
         val customerId = hashMapOf(
@@ -103,7 +159,7 @@ constructor(
         }
     }
 
-    fun checkLoginDataIntoFireStore(id: String, pass: String) {
+    fun checkLoginDataIntoFireStore(id: String, pass: String, navController: NavController) {
         val custLoginRef = firebaseFireStore.collection("customerData")
 
         custLoginRef.document(id).get().addOnSuccessListener { document ->
@@ -113,6 +169,10 @@ constructor(
                 val ccpass = document.getString("cpass")
                 if (ccid == id && ccpass == pass) {
                     Log.d("LoginFragment", "User Valid")
+                    val action =
+                        LoginFragmentDirections.actionLoginFragmentToCustomerRegistrationFragment()
+                    navController.navigate(action)
+
                 } else {
                     Log.d("LoginFragment", "User not Valid")
                 }
@@ -122,6 +182,7 @@ constructor(
         }.addOnFailureListener { exception ->
             Log.d("LoginFragment", "get failed with", exception)
         }
+
 
     }
 
