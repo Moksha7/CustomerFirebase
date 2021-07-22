@@ -3,6 +3,7 @@ package com.example.customerfirebase.di
 import com.example.customerfirebase.db.CustomerDao
 import com.example.customerfirebase.db.DbRepository
 import com.example.customerfirebase.db.DefaultDbRepo
+import com.example.customerfirebase.utils.Constant.PRODUCT
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -39,10 +40,20 @@ object AppModule {
         return firestore.collection("customerDetails")
     }
 
+
+    @Singleton
+    @Provides
+    fun provideProductDetailsCollectionRef(firestore: FirebaseFirestore): CollectionReference {
+        return firestore.collection(PRODUCT)
+    }
+
+
     @Provides
     fun provideDefaultDbRepo(
         customerDao: CustomerDao,
     ): DefaultDbRepo {
         return DbRepository(customerDao)
     }
+
+
 }

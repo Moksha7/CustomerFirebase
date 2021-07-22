@@ -11,12 +11,14 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.customerfirebase.databinding.FragmentLoginBinding
+import com.example.customerfirebase.utils.Constant.PERSONAL_CARE
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import com.example.customerfirebase.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
+
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
@@ -57,6 +59,10 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+
+        //viewModel.addProductDetails()
+        viewModel.loadProductDetailsFromCategory(PERSONAL_CARE)
+
         return binding.root
     }
 

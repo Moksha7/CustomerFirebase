@@ -8,15 +8,17 @@ import androidx.navigation.NavController
 import com.example.customerfirebase.db.DbRepository
 import com.example.customerfirebase.model.Customer
 import com.example.customerfirebase.model.CustomerData
+import com.example.customerfirebase.model.CustomerDetails
+import com.example.customerfirebase.model.Product
 import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
+import com.example.customerfirebase.utils.Constant.LIFE_STYLE
+import com.example.customerfirebase.utils.Constant.PRODUCT
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-
-var maxid: Int = 2000
-
+var maxid = 2000
 @HiltViewModel
 class FirebaseViewModel @Inject
 constructor(
@@ -24,17 +26,17 @@ constructor(
     private val dbRepository: DbRepository,
     private val firebaseFireStore: FirebaseFirestore,
 ) : ViewModel() {
-
+    val TAG = "LoginFragment"
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
         val customerData = CustomerData(id, name, pass)
         dbRepository.insertCustomer(customerData)
-        Log.d("LoginFragment", "Cust data added")
+        Log.d(TAG, "Cust data added")
     }
 
     fun insertCustIdIntoRoomDB(id: String) {
         val cId = Customer(id)
         dbRepository.insertCustId(cId)
-        Log.d("LoginFragment", "cust id added")
+        Log.d(TAG, "cust id added")
     }
 
     fun checkCustIdIntoRoomDB(id: String, name: String, pass: String) {
@@ -42,9 +44,9 @@ constructor(
         if (cId != null) {
             insertCustDataIntoRoomDB(id, name, pass)
             //insertCustDataIntoFireStore(id, name, pass)
-            Log.d("LoginFragment", "User is valid")
+            Log.d(TAG, "User is valid")
         } else {
-            Log.d("LoginFragment", "User is not valid")
+            Log.d(TAG, "User is not valid")
         }
     }
 
@@ -58,14 +60,27 @@ constructor(
         firebaseFireStore.collection("customerData").document(id)
             .set(customerData)
             .addOnCompleteListener {
-                Log.d("LoginFragment",
+                Log.d(TAG,
                     "DocumentSnapshot custData successfully written!")
             }
             .addOnFailureListener { e ->
-                Log.d("LoginFragment",
+                Log.d(TAG,
                     "Error writing custData document",
                     e)
             }
+    }
+
+    fun autoIncrementCustId() {
+        firebaseFireStore.collection("customerDetails").get().addOnSuccessListener { document ->
+            if (document != null) {
+                for (changes in document.documentChanges) {
+                    val doc = changes.document
+                    maxid = doc.id.toInt()
+                }
+            }
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
     }
 
     fun insertCustomerDetailsIntoFireStore(
@@ -76,40 +91,39 @@ constructor(
         customerLocation: String,
         customerMobile: String,
     ) {
+        autoIncrementCustId()
+        val customerDetail = CustomerDetails(maxid,
+            customerName,
+            customerAddress,
+            customerVillage,
+            customerCity,
+            customerLocation,
+            customerMobile)
         //saveCustId(maxid.toString())
-        loadCustId()
-        val customerDetails = hashMapOf(
-            "customerId" to maxid,
-            "customerName" to customerName,
-            "customerAddress" to customerAddress,
-            "customerVillage" to customerVillage,
-            "customerCity" to customerCity,
-            "customerLocation" to customerLocation,
-            "customerMobile" to customerMobile
-        )
-
+        // loadCustId()
         firebaseFireStore.collection("customerDetails").document(maxid.toString())
-            .set(customerDetails)
+            .set(customerDetail)
             .addOnCompleteListener {
-                Log.d("LoginFragment",
+                Log.d(TAG,
                     "DocumentSnapshot CustomerDetails successfully written!")
                 maxid = maxid + 1
-                saveCustId(maxid.toString())
+                //saveCustId(maxid.toString())
             }
             .addOnFailureListener { e ->
-                Log.d("LoginFragment",
+                Log.d(TAG,
                     "Error writing CustomerDetails document",
                     e)
             }
 
     }
 
+
     fun loadCustId() {
         val location = "customerId"
         val prefs = context.getSharedPreferences("CustomerId",
             AppCompatActivity.MODE_PRIVATE)
         val city = prefs?.getString(location, "").toString()
-        maxid = city.toInt()
+        //maxid = city.toInt()
     }
 
     fun saveCustId(cid: String?) {
@@ -121,6 +135,7 @@ constructor(
         editor.apply()
     }
 
+
     fun insertCustIdIntoFireStore(id: String) {
         val customerId = hashMapOf(
             "cid" to id
@@ -129,11 +144,11 @@ constructor(
         firebaseFireStore.collection("customer").document(id)
             .set(customerId)
             .addOnCompleteListener {
-                Log.d("LoginFragment",
+                Log.d(TAG,
                     "DocumentSnapshot custId successfully written!")
             }
             .addOnFailureListener { e ->
-                Log.d("LoginFragment",
+                Log.d(TAG,
                     "Error writing custId document",
                     e)
             }
@@ -143,19 +158,19 @@ constructor(
         val custIdRef = firebaseFireStore.collection("customer")
         custIdRef.document(id).get().addOnSuccessListener { document ->
             if (document != null) {
-                Log.d("LoginFragment", "Document Snapshot Data: ${document.data}")
+                Log.d(TAG, "Document Snapshot Data: ${document.data}")
                 val ccid = document.getString("cid")
                 if (ccid == id) {
                     insertCustDataIntoFireStore(id, name, pass)
-                    Log.d("LoginFragment", "User Valid")
+                    Log.d(TAG, "User Valid")
                 } else {
-                    Log.d("LoginFragment", "User not Valid")
+                    Log.d(TAG, "User not Valid")
                 }
             } else {
-                Log.d("LoginFragment", "No such Document Snapshot")
+                Log.d(TAG, "No such Document Snapshot")
             }
         }.addOnFailureListener { exception ->
-            Log.d("LoginFragment", "get failed with", exception)
+            Log.d(TAG, "get failed with", exception)
         }
     }
 
@@ -164,26 +179,92 @@ constructor(
 
         custLoginRef.document(id).get().addOnSuccessListener { document ->
             if (document != null) {
-                Log.d("LoginFragment", "Document Snapshot Data: ${document.data}")
+                Log.d(TAG, "Document Snapshot Data: ${document.data}")
                 val ccid = document.getString("cid")
                 val ccpass = document.getString("cpass")
                 if (ccid == id && ccpass == pass) {
-                    Log.d("LoginFragment", "User Valid")
+                    Log.d(TAG, "User Valid")
                     val action =
                         LoginFragmentDirections.actionLoginFragmentToCustomerRegistrationFragment()
                     navController.navigate(action)
 
                 } else {
-                    Log.d("LoginFragment", "User not Valid")
+                    Log.d(TAG, "User not Valid")
                 }
             } else {
-                Log.d("LoginFragment", "No such Document Snapshot")
+                Log.d(TAG, "No such Document Snapshot")
             }
         }.addOnFailureListener { exception ->
-            Log.d("LoginFragment", "get failed with", exception)
+            Log.d(TAG, "get failed with", exception)
         }
 
 
     }
 
+
+    fun loadProductDetailsFromCategory(category: String) {
+        val productRef = firebaseFireStore.collection(PRODUCT)
+        productRef.get().addOnSuccessListener { documents ->
+            if (documents != null) {
+                Log.d(TAG, "Document Product Snapshot Data: ")
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+
+                    if (category == document.getString("productCategory")) {
+                        val productName = document.getString("productName")
+                        val productQuantity = document.getString("productQuantity")
+                        val productPrice = document.getString("productPrice")
+                        val productTotal = document.getString("productTotal")
+                        val productCategory = document.getString("productCategory")
+                        Log.d(TAG, "Product Name : " + productName)
+                        Log.d(TAG, "Product Quantity: " + productQuantity)
+                        Log.d(TAG, "Product Price: " + productPrice)
+                        Log.d(TAG, "Product Total: " + productTotal)
+                        Log.d(TAG, "Product Category: " + productCategory)
+                    }
+                }
+
+                //val product = Product(0,category,productName.toString(),productQuantity.toString(),productPrice.toString(),productTotal.toString())
+                //dbRepository.insertProduct(product)
+                Log.d(TAG, "Product Details Document Snapshot")
+
+            } else {
+                Log.d(TAG, "No such Document Snapshot")
+            }
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
+
+    }
+
+
+    fun addProductDetails() {
+        val product = Product()
+        product.productName = "abcxyz"
+        product.productTotal = "20"
+        product.productQuantity = "20"
+        product.productCategory = LIFE_STYLE
+        product.productPrice = "10"
+
+        dbRepository.insertProduct(product)
+        firebaseFireStore.collection(PRODUCT).document()
+            .set(product)
+            .addOnCompleteListener {
+                Log.d(TAG,
+                    "DocumentSnapshot Product Details successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Log.d(TAG,
+                    "Error writing ProductDetails document",
+                    e)
+            }
+
+
+    }
+
 }
+
+
+
+
+

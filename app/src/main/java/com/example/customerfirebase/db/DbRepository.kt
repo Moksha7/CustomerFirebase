@@ -2,6 +2,7 @@ package com.example.customerfirebase.db
 
 import com.example.customerfirebase.model.Customer
 import com.example.customerfirebase.model.CustomerData
+import com.example.customerfirebase.model.Product
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +27,14 @@ class DbRepository @Inject constructor(
             customerDao.insertCustId(customer)
         }
     }
+
+    override fun insertProduct(product: Product) {
+        CoroutineScope(Dispatchers.IO).launch {
+            customerDao.insertProduct(product)
+        }
+    }
+
+    override fun getProductByCategory(category: String) = customerDao.getProductByCategory(category)
 
 
 }
