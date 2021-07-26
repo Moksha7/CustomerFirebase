@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.example.customerfirebase.databinding.FragmentCustomerRegistrationBinding
 import com.example.customerfirebase.viewmodel.CustomerRegisterViewModel
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
@@ -20,6 +22,7 @@ class CustomerRegistrationFragment : Fragment() {
     private var city: String = "ah"
     private var _binding: FragmentCustomerRegistrationBinding? = null
     private val binding get() = _binding!!
+    private lateinit var navController: NavController
 
 
     override fun onCreateView(
@@ -68,9 +71,15 @@ class CustomerRegistrationFragment : Fragment() {
                 customerVillage,
                 customerCity,
                 customerLocation,
-                customerMobile)
+                customerMobile, navController)
         }
 
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
     }
 
     override fun onStart() {

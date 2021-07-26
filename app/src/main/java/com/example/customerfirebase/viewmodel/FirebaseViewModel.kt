@@ -3,15 +3,14 @@ package com.example.customerfirebase.viewmodel
 import android.content.Context
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.customerfirebase.db.DbRepository
-import com.example.customerfirebase.model.Customer
-import com.example.customerfirebase.model.CustomerData
-import com.example.customerfirebase.model.CustomerDetails
-import com.example.customerfirebase.model.Product
+import com.example.customerfirebase.model.*
+import com.example.customerfirebase.ui.fragment.CustomerRegistrationFragmentDirections
 import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
-import com.example.customerfirebase.utils.Constant.LIFE_STYLE
+import com.example.customerfirebase.ui.fragment.ProductInsertFragmentDirections
 import com.example.customerfirebase.utils.Constant.PRODUCT
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +24,12 @@ constructor(
     @ApplicationContext private val context: Context,
     private val dbRepository: DbRepository,
     private val firebaseFireStore: FirebaseFirestore,
+
 ) : ViewModel() {
     val TAG = "LoginFragment"
+    var productList = MutableLiveData<ArrayList<ProductDetails>>()
+    var newProductList = arrayListOf<ProductDetails>()
+
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
         val customerData = CustomerData(id, name, pass)
         dbRepository.insertCustomer(customerData)
@@ -90,6 +93,7 @@ constructor(
         customerCity: String,
         customerLocation: String,
         customerMobile: String,
+        navController: NavController,
     ) {
         autoIncrementCustId()
         val customerDetail = CustomerDetails(maxid,
@@ -107,6 +111,9 @@ constructor(
                 Log.d(TAG,
                     "DocumentSnapshot CustomerDetails successfully written!")
                 maxid = maxid + 1
+                val action =
+                    CustomerRegistrationFragmentDirections.actionCustomerRegistrationFragmentToCategoryFragment()
+                navController.navigate(action)
                 //saveCustId(maxid.toString())
             }
             .addOnFailureListener { e ->
@@ -203,19 +210,22 @@ constructor(
 
 
     fun loadProductDetailsFromCategory(category: String) {
+        newProductList.clear()
         val productRef = firebaseFireStore.collection(PRODUCT)
         productRef.get().addOnSuccessListener { documents ->
             if (documents != null) {
                 Log.d(TAG, "Document Product Snapshot Data: ")
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-
                     if (category == document.getString("productCategory")) {
                         val productName = document.getString("productName")
                         val productQuantity = document.getString("productQuantity")
                         val productPrice = document.getString("productPrice")
                         val productTotal = document.getString("productTotal")
                         val productCategory = document.getString("productCategory")
+                        val product = document.toObject(ProductDetails::class.java)
+                        newProductList.add(product)
+                        productList.value = newProductList
                         Log.d(TAG, "Product Name : " + productName)
                         Log.d(TAG, "Product Quantity: " + productQuantity)
                         Log.d(TAG, "Product Price: " + productPrice)
@@ -223,28 +233,34 @@ constructor(
                         Log.d(TAG, "Product Category: " + productCategory)
                     }
                 }
-
-                //val product = Product(0,category,productName.toString(),productQuantity.toString(),productPrice.toString(),productTotal.toString())
-                //dbRepository.insertProduct(product)
-                Log.d(TAG, "Product Details Document Snapshot")
-
-            } else {
-                Log.d(TAG, "No such Document Snapshot")
             }
+            Log.d(TAG, "Product Details Document Snapshot")
+
+
         }.addOnFailureListener { exception ->
             Log.d(TAG, "get failed with", exception)
         }
 
+        Log.d(TAG, "product List : " + productList.value)
+
+
     }
 
 
-    fun addProductDetails() {
+    fun addProductDetails(
+        name: String,
+        category: String,
+        quantity: String,
+        price: String,
+        total: String,
+        navController: NavController,
+    ) {
         val product = Product()
-        product.productName = "abcxyz"
-        product.productTotal = "20"
-        product.productQuantity = "20"
-        product.productCategory = LIFE_STYLE
-        product.productPrice = "10"
+        product.productName = name
+        product.productTotal = total
+        product.productQuantity = quantity
+        product.productCategory = category
+        product.productPrice = price
 
         dbRepository.insertProduct(product)
         firebaseFireStore.collection(PRODUCT).document()
@@ -252,6 +268,9 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Product Details successfully written!")
+                val action =
+                    ProductInsertFragmentDirections.actionProductInsertFragmentToProductFragment()
+                navController.navigate(action)
             }
             .addOnFailureListener { e ->
                 Log.d(TAG,

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="productDetails"
+            type="com.example.customerfirebase.viewmodel.ProductDetailsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.LoginFragment">
+
+        <!--guideline_horizontal-->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+        <!--guideline_horizontal-->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/iv_login_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/todo"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/background_lightgrey_transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_horizontal" />
+
+        <ImageView
+            android:id="@+id/iv_login_firebase_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/white_border"
+            android:contentDescription="@string/todo"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/firebase_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_horizontal"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline_horizontal"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/tv_product_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/product_details"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textsize_xxlarge"
+            app:layout_constraintLeft_toLeftOf="@+id/guideline_vertical"
+            app:layout_constraintRight_toRightOf="@+id/guideline_vertical"
+            app:layout_constraintTop_toBottomOf="@+id/iv_login_firebase_logo" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="@string/product_name"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_product_details" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductNam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="@={productDetails.productName}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@+id/mtvProductName"
+            app:layout_constraintTop_toBottomOf="@+id/tv_product_details" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Product Category"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductName" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductCat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="@={productDetails.productCategory}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@+id/mtvProductCategory"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductName" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Product quantity"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductCategory" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductQua"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="@={productDetails.productQuantity}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@+id/mtvProductQuantity"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductCategory" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Product Price"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductQuantity" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductPric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="@={productDetails.productPrice}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@+id/mtvProductPrice"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductQuantity" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="Product Total"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductPrice" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductTot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="5dp"
+            android:text="@={productDetails.productTotal}"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toRightOf="@+id/mtvProductTotal"
+            app:layout_constraintTop_toBottomOf="@+id/mtvProductPrice" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -11,6 +11,14 @@
     <string name="welcome_to">Welcome to </string>
     <string name="welcome_back">Welcome back</string>
 
+    <string-array name="category_array">
+        <item>Personal_Care</item>
+        <item>Home_Care</item>
+        <item>Life_Style</item>
+        <item>Agriculture</item>
+        <item>Health_Care</item>
+    </string-array>
+
     <!--Login-->
     <string name="email">Email</string>
     <string name="key">Customer Key</string>
@@ -41,4 +49,11 @@
     <string name="save">Save</string>
     <string name="save_location">save Location</string>
     <string name="get_location">get location</string>
+    <string name="product_details">Product Details</string>
+    <string name="product_name">Product Name</string>
+    <string name="load_product">Load Product</string>
+    <string name="insert_product">Insert Product</string>
+    <string name="total">Total</string>
+    <string name="price">Price</string>
+    <string name="quantity">Quantity</string>
 </resources>
