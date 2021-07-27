@@ -10,35 +10,32 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.customerfirebase.adapter.ProductAdapter
-import com.example.customerfirebase.databinding.FragmentProductBinding
-import com.example.customerfirebase.model.ProductDetails
+import com.example.customerfirebase.adapter.CustomerAdapter
+import com.example.customerfirebase.databinding.FragmentCustomerDashboardBinding
+import com.example.customerfirebase.model.FirestoreCustomerDetails
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
-    val TAG = "Product Fragment"
-    private var _binding: FragmentProductBinding? = null
+class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
+    val TAG = "Customer Fragment"
+    private var _binding: FragmentCustomerDashboardBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
     private lateinit var viewModel: FirebaseViewModel
     var category: String = ""
-    var categoryId: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        viewModel.loadProductDetailsFromCategory(category)
-        loadProductList(viewModel)
-        binding.productRecyclerView.layoutManager = LinearLayoutManager(context)
+        viewModel.loadCustomerFromFirestore()
+        loadCustomerList(viewModel)
+        binding.customerrecyclerview.layoutManager = LinearLayoutManager(context)
 
-        binding.fabAdd.setOnClickListener {
+        binding.fabCustomerAdd.setOnClickListener {
             val action =
-                ProductFragmentDirections.actionProductFragmentToProductInsertFragment(category,
-                    categoryId)
+                CustomerDashboardFragmentDirections.actionCustomerDashboardFragmentToCustomerRegistrationFragment()
             navController.navigate(action)
         }
     }
@@ -49,7 +46,7 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
         savedInstanceState: Bundle?,
     ): View {
 
-        _binding = FragmentProductBinding.inflate(
+        _binding = FragmentCustomerDashboardBinding.inflate(
             inflater,
             container,
             false
@@ -58,20 +55,18 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
         viewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
-        val safeArgs: ProductFragmentArgs by navArgs()
-        category = safeArgs.productDetails
-        categoryId = safeArgs.categoryId
-
         return binding.root
     }
 
 
-    private fun loadProductList(viewModel: FirebaseViewModel) {
-        viewModel.productList.observe(viewLifecycleOwner, Observer {
-            binding.productRecyclerView.adapter = context?.let { it1 ->
-                ProductAdapter(this, it1, it)
+    private fun loadCustomerList(viewModel: FirebaseViewModel) {
+
+        viewModel.customerList.observe(viewLifecycleOwner, Observer {
+            binding.customerrecyclerview.adapter = context?.let { it1 ->
+                CustomerAdapter(this, it1, it)
             }
         })
+
 
     }
 
@@ -80,11 +75,15 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     }
 
 
-    override fun onItemClick(productDetails: ProductDetails) {
+    override fun onClick(customerDetails: FirestoreCustomerDetails) {
         val action =
-            ProductFragmentDirections.actionProductFragmentToProductDetailsFragment(productDetails)
+            CustomerDashboardFragmentDirections.actionCustomerDashboardFragmentToCustomerDetailsFragment(
+                customerDetails)
         navController.navigate(action)
-        Toast.makeText(context, productDetails.productName, Toast.LENGTH_LONG).show()
+        Toast.makeText(context,
+            customerDetails.customerName + "  " + customerDetails.customerId,
+            Toast.LENGTH_LONG).show()
+
     }
 
 

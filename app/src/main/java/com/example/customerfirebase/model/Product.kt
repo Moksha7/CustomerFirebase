@@ -27,4 +27,6 @@ data class Product(
     var productPrice: String = "",
     @ColumnInfo(name = PRODUCT_TOTAL)
     var productTotal: String = "",
+    @ColumnInfo(name = "customerId")
+    var customerId: String = "",
 ) : Parcelable

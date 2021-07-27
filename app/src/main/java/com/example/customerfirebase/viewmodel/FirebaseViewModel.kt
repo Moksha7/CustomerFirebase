@@ -11,13 +11,15 @@ import com.example.customerfirebase.model.*
 import com.example.customerfirebase.ui.fragment.CustomerRegistrationFragmentDirections
 import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
 import com.example.customerfirebase.ui.fragment.ProductInsertFragmentDirections
+import com.example.customerfirebase.utils.Constant.CUSTOMER_DETAILS_REF
 import com.example.customerfirebase.utils.Constant.PRODUCT
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-var maxid = 2000
+var maxid = 0
 @HiltViewModel
 class FirebaseViewModel @Inject
 constructor(
@@ -29,6 +31,10 @@ constructor(
     val TAG = "LoginFragment"
     var productList = MutableLiveData<ArrayList<ProductDetails>>()
     var newProductList = arrayListOf<ProductDetails>()
+
+    var customerList = MutableLiveData<ArrayList<FirestoreCustomerDetails>>()
+    var newCustomerList = arrayListOf<FirestoreCustomerDetails>()
+
 
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
         val customerData = CustomerData(id, name, pass)
@@ -73,20 +79,7 @@ constructor(
             }
     }
 
-    fun autoIncrementCustId() {
-        firebaseFireStore.collection("customerDetails").get().addOnSuccessListener { document ->
-            if (document != null) {
-                for (changes in document.documentChanges) {
-                    val doc = changes.document
-                    maxid = doc.id.toInt()
-                }
-            }
-        }.addOnFailureListener { exception ->
-            Log.d(TAG, "get failed with", exception)
-        }
-    }
-
-    fun insertCustomerDetailsIntoFireStore(
+    fun autoIncrementCustId(
         customerName: String,
         customerAddress: String,
         customerVillage: String,
@@ -95,7 +88,36 @@ constructor(
         customerMobile: String,
         navController: NavController,
     ) {
-        autoIncrementCustId()
+        firebaseFireStore.collection("customerDetails")
+            .orderBy("customerId", Query.Direction.DESCENDING).limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    var id = document.id
+                    maxid += id.toInt()
+                    insertCustomerDetailsIntoFireStore(maxid + 1,
+                        customerName,
+                        customerAddress,
+                        customerVillage,
+                        customerCity,
+                        customerLocation,
+                        customerMobile,
+                        navController)
+                }
+            }
+    }
+
+
+    fun insertCustomerDetailsIntoFireStore(
+        maxid: Int,
+        customerName: String,
+        customerAddress: String,
+        customerVillage: String,
+        customerCity: String,
+        customerLocation: String,
+        customerMobile: String,
+        navController: NavController,
+    ) {
         val customerDetail = CustomerDetails(maxid,
             customerName,
             customerAddress,
@@ -110,9 +132,9 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot CustomerDetails successfully written!")
-                maxid = maxid + 1
+
                 val action =
-                    CustomerRegistrationFragmentDirections.actionCustomerRegistrationFragmentToCategoryFragment()
+                    CustomerRegistrationFragmentDirections.actionCustomerRegistrationFragmentToCustomerDashboardFragment()
                 navController.navigate(action)
                 //saveCustId(maxid.toString())
             }
@@ -192,7 +214,7 @@ constructor(
                 if (ccid == id && ccpass == pass) {
                     Log.d(TAG, "User Valid")
                     val action =
-                        LoginFragmentDirections.actionLoginFragmentToCustomerRegistrationFragment()
+                        LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment()
                     navController.navigate(action)
 
                 } else {
@@ -205,6 +227,26 @@ constructor(
             Log.d(TAG, "get failed with", exception)
         }
 
+
+    }
+
+    fun loadCustomerFromFirestore() {
+        val customerRef = firebaseFireStore.collection(CUSTOMER_DETAILS_REF)
+        customerRef.get().addOnSuccessListener { documents ->
+            if (documents != null) {
+                Log.d(TAG, "Document Product Snapshot Data: ")
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    val customerDetails = document.toObject(FirestoreCustomerDetails::class.java)
+                    newCustomerList.add(customerDetails)
+                    customerList.value = newCustomerList
+                }
+            }
+            Log.d(TAG, "customer Details Document Snapshot")
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
+        Log.d(TAG, "customer List : " + customerList.value)
 
     }
 
@@ -253,6 +295,7 @@ constructor(
         quantity: String,
         price: String,
         total: String,
+        customerId: String,
         navController: NavController,
     ) {
         val product = Product()
@@ -261,6 +304,7 @@ constructor(
         product.productQuantity = quantity
         product.productCategory = category
         product.productPrice = price
+        product.customerId = customerId
 
         dbRepository.insertProduct(product)
         firebaseFireStore.collection(PRODUCT).document()

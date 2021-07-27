@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.customerfirebase.databinding.FragmentCustomerRegistrationBinding
+import com.example.customerfirebase.model.FirestoreCustomerDetails
 import com.example.customerfirebase.viewmodel.CustomerRegisterViewModel
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,8 +41,9 @@ class CustomerRegistrationFragment : Fragment() {
         val viewModel: FirebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
+        val firebaseCustomerDetails = FirestoreCustomerDetails()
         binding.apply {
-            customerRegistration = CustomerRegisterViewModel()
+            customerRegistration = CustomerRegisterViewModel(firebaseCustomerDetails)
 
             tietCustomerLocation.setOnClickListener {
                 val intent = Intent(activity, LocationActivity::class.java)
@@ -66,7 +68,7 @@ class CustomerRegistrationFragment : Fragment() {
             val customerLocation = tietCustomerLocation.text.toString()
             val customerMobile = tietCustomerMobile.text.toString()
 
-            viewModel.insertCustomerDetailsIntoFireStore(customerName,
+            viewModel.autoIncrementCustId(customerName,
                 customerAddress,
                 customerVillage,
                 customerCity,

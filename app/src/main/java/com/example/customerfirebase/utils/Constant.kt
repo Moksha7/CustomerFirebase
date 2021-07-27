@@ -14,6 +14,7 @@ object Constant {
     const val PRODUCT_QUANTITY = "Product_Quantity"
     const val PRODUCT_TOTAL = "Product_Total"
     const val PRODUCT_CATEGORY = "Product_Category"
+    const val CUSTOMER_DETAILS_REF = "customerDetails"
 
 
 }

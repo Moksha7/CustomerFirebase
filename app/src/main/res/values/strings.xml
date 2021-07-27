@@ -33,7 +33,7 @@
 
     <!--Register-->
     <string name="create_account">Create Account</string>
-    <string name="name">Name</string>
+    <string name="name">Name :  </string>
     <string name="register">Register</string>
     <string name="or_register_with">Or register with</string>
     <string name="already_have_an_account">Already have an account? <font color="#FFBD2A"><big><b>Login</b></big></font></string>
@@ -56,4 +56,7 @@
     <string name="total">Total</string>
     <string name="price">Price</string>
     <string name="quantity">Quantity</string>
+    <string name="welcome">Welcome</string>
+    <string name="no_customer_added">No Customer Added</string>
+    <string name="customer_name">Customer Name</string>
 </resources>

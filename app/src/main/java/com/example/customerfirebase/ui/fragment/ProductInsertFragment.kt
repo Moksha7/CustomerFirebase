@@ -37,12 +37,9 @@ class ProductInsertFragment : Fragment() {
         val viewModel: FirebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
-        val safeArgs: ProductFragmentArgs by navArgs()
-        val category = safeArgs.productDetails
 
         binding.apply {
             insertProduct = ProductDetailsViewModel(ProductDetails())
-
 
             btnInsertProduct.setOnClickListener {
                 saveProductInsert(viewModel)
@@ -55,18 +52,24 @@ class ProductInsertFragment : Fragment() {
     private fun saveProductInsert(viewModel: FirebaseViewModel) {
         val safeArgs: ProductInsertFragmentArgs by navArgs()
         val category = safeArgs.category
+        val customerId = safeArgs.categoryId
         binding.apply {
             val productName = tietProductName.text.toString()
             val quantity = tietProductQuantity.text.toString()
             val price = tietProductPrice.text.toString()
             val total = tietProductTotal.text.toString()
 
-            viewModel.addProductDetails(productName,
-                category,
-                quantity,
-                price,
-                total,
-                navController)
+            if (category != null) {
+                if (customerId != null) {
+                    viewModel.addProductDetails(productName,
+                        category,
+                        quantity,
+                        price,
+                        total,
+                        customerId,
+                        navController)
+                }
+            }
         }
 
     }

@@ -2,46 +2,56 @@ package com.example.customerfirebase.viewmodel
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import com.example.customerfirebase.model.FirestoreCustomerDetails
 
-class CustomerRegisterViewModel : BaseObservable() {
+class CustomerRegisterViewModel(firebaseCustomerDetails: FirestoreCustomerDetails?) :
+    BaseObservable() {
 
     @Bindable
-    var customerName: String = ""
+    var customerId: Long = firebaseCustomerDetails?.customerId ?: 0
+        set(value) {
+            field = value
+            notifyChange()
+        }
+
+
+    @Bindable
+    var customerName: String = firebaseCustomerDetails?.customerName ?: ""
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var customerAddress: String = ""
+    var customerAddress: String = firebaseCustomerDetails?.customerAddress ?: ""
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var customerVillage: String = ""
+    var customerVillage: String = firebaseCustomerDetails?.customerVillage ?: ""
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var customerDistrict: String = ""
+    var customerDistrict: String = firebaseCustomerDetails?.customerCity ?: ""
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var customerLocation: String = ""
+    var customerLocation: String = firebaseCustomerDetails?.customerLocation ?: ""
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var customerMobile: String = ""
+    var customerMobile: String = firebaseCustomerDetails?.customerMobile ?: ""
         set(value) {
             field = value
             notifyChange()

@@ -8,20 +8,20 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.customerfirebase.ui.fragment.LoginFragment"
-        android:label="fragment_login"
+        android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_customerRegistrationFragment"
-            app:destination="@id/customerRegistrationFragment" />
+            android:id="@+id/action_loginFragment_to_customerDashboardFragment"
+            app:destination="@id/customerDashboardFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.customerfirebase.ui.fragment.RegisterFragment"
-        android:label="fragment_registration"
+        android:label="Registraton"
         tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
@@ -31,20 +31,25 @@
     <fragment
         android:id="@+id/customerRegistrationFragment"
         android:name="com.example.customerfirebase.ui.fragment.CustomerRegistrationFragment"
-        android:label="CustomerRegistrationFragment"
+        android:label="Customer Registration"
         tools:layout="@layout/fragment_customer_registration">
         <action
-            android:id="@+id/action_customerRegistrationFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            android:id="@+id/action_customerRegistrationFragment_to_customerDashboardFragment"
+            app:destination="@id/customerDashboardFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/productFragment"
         android:name="com.example.customerfirebase.ui.fragment.ProductFragment"
-        android:label="ProductFragment"
+        android:label="Product List"
         tools:layout="@layout/fragment_product">
         <argument
             android:name="productDetails"
+            android:defaultValue="abc"
+            app:argType="string"
+            app:nullable="false" />
+        <argument
+            android:name="categoryId"
             android:defaultValue="abc"
             app:argType="string"
             app:nullable="false" />
@@ -59,7 +64,7 @@
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="com.example.customerfirebase.ui.fragment.ProductDetailsFragment"
-        android:label="ProductDetailsFragment"
+        android:label="Product Details"
         tools:layout="@layout/fragment_product_details">
         <argument
             android:name="productDetails"
@@ -70,7 +75,12 @@
     <fragment
         android:id="@+id/categoryFragment"
         android:name="com.example.customerfirebase.ui.fragment.CategoryFragment"
-        android:label="CategoryFragment">
+        android:label="Product Category">
+        <argument
+            android:name="categoryId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_categoryFragment_to_productFragment"
             app:destination="@id/productFragment" />
@@ -78,14 +88,43 @@
     <fragment
         android:id="@+id/productInsertFragment"
         android:name="com.example.customerfirebase.ui.fragment.ProductInsertFragment"
-        android:label="ProductInsertFragment">
+        android:label="Add Product">
         <argument
             android:name="category"
-            android:defaultValue="abc"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="false" />
+            app:nullable="true" />
+        <argument
+            android:name="categoryId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_productInsertFragment_to_productFragment"
             app:destination="@id/productFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customerDashboardFragment"
+        android:name="com.example.customerfirebase.ui.fragment.CustomerDashboardFragment"
+        android:label="Customer Dashboard">
+        <action
+            android:id="@+id/action_customerDashboardFragment_to_customerRegistrationFragment"
+            app:destination="@id/customerRegistrationFragment" />
+        <action
+            android:id="@+id/action_customerDashboardFragment_to_customerDetailsFragment"
+            app:destination="@id/customerDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customerDetailsFragment"
+        android:name="com.example.customerfirebase.ui.fragment.CustomerDetailsFragment"
+        android:label="Customer Details">
+        <argument
+            android:name="customerDetails"
+            android:defaultValue="@null"
+            app:argType="com.example.customerfirebase.model.FirestoreCustomerDetails"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_customerDetailsFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment" />
     </fragment>
 </navigation>
