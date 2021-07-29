@@ -22,6 +22,9 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
     val TAG = "Customer Fragment"
     private var _binding: FragmentCustomerDashboardBinding? = null
     private val binding get() = _binding!!
+
+    /* private var _collapsebinding:CollapsingToolbarBinding? = null
+     private val collapsingBinding get() = _collapsebinding*/
     private lateinit var navController: NavController
     private lateinit var viewModel: FirebaseViewModel
     var category: String = ""
@@ -32,6 +35,7 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
         viewModel.loadCustomerFromFirestore()
         loadCustomerList(viewModel)
         binding.customerrecyclerview.layoutManager = LinearLayoutManager(context)
+        binding.customerrecyclerview.setHasFixedSize(true)
 
         binding.fabCustomerAdd.setOnClickListener {
             val action =
@@ -51,9 +55,16 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
             container,
             false
         )
+        activity?.setTitle("Customer List")
+
+        /* _collapsebinding = CollapsingToolbarBinding.bind(view)
+
+         _collapsebinding!!.toolbar.title = "Welcome"*/
 
         viewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
+
+
 
         return binding.root
     }

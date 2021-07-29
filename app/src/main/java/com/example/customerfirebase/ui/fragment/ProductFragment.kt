@@ -23,22 +23,24 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     val TAG = "Product Fragment"
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var navController: NavController
     private lateinit var viewModel: FirebaseViewModel
     var category: String = ""
-    var categoryId: String = ""
+    var customerId: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        viewModel.loadProductDetailsFromCategory(category)
+        viewModel.loadProductDetailsFromCategory(category, customerId)
         loadProductList(viewModel)
         binding.productRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.productRecyclerView.setHasFixedSize(true)
 
         binding.fabAdd.setOnClickListener {
             val action =
                 ProductFragmentDirections.actionProductFragmentToProductInsertFragment(category,
-                    categoryId)
+                    customerId)
             navController.navigate(action)
         }
     }
@@ -55,12 +57,16 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
             false
         )
 
+
+
+
         viewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
+
         val safeArgs: ProductFragmentArgs by navArgs()
         category = safeArgs.productDetails
-        categoryId = safeArgs.categoryId
+        customerId = safeArgs.categoryId
 
         return binding.root
     }

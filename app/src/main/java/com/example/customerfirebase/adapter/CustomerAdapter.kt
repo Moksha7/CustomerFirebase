@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.customerfirebase.R
 import com.example.customerfirebase.databinding.CustomerItemBinding
 import com.example.customerfirebase.model.FirestoreCustomerDetails
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 
 
@@ -23,10 +24,18 @@ class CustomerAdapter(
         internal var mtvCustomerName: MaterialTextView
         internal var mtvCustomerAddress: MaterialTextView
         internal var mtvCustomerDistrict: MaterialTextView
+        internal var mtvCustomerButton: MaterialButton
 
         init {
             binding.apply {
                 root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val customerDetails = list[position]
+                        listener.onClick(customerDetails)
+                    }
+                }
+                btnCustomerItemDisplay.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         val customerDetails = list[position]
@@ -40,14 +49,7 @@ class CustomerAdapter(
                 itemView.findViewById(R.id.mtvCustomerAddress)// Initialize your All views prensent in list items
             mtvCustomerDistrict =
                 itemView.findViewById(R.id.mtvCustomerCity)// Initialize your All views prensent in list items
-        }
-
-        fun bind(position: Int) {
-            binding.apply {
-                mtvCustomerName.text = list[position].customerName
-                mtvCustomerAddress.text = list[position].customerAddress
-                mtvCustomerDistrict.text = list[position].customerCity
-            }
+            mtvCustomerButton = itemView.findViewById(R.id.btn_customer_item_display)
         }
 
     }
@@ -63,11 +65,13 @@ class CustomerAdapter(
     }
 
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
-        holder.bind(position)
+        holder.mtvCustomerName.text = list[position].customerName
+        holder.mtvCustomerAddress.text = list[position].customerAddress
+        holder.mtvCustomerDistrict.text = list[position].customerCity
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list.count()
     }
 
     class DiffCallback : DiffUtil.ItemCallback<FirestoreCustomerDetails>() {
@@ -75,7 +79,7 @@ class CustomerAdapter(
             oldItem: FirestoreCustomerDetails,
             newItem: FirestoreCustomerDetails,
         ) =
-            oldItem.customerName == newItem.customerName
+            oldItem.customerId == newItem.customerId
 
         override fun areContentsTheSame(
             oldItem: FirestoreCustomerDetails,

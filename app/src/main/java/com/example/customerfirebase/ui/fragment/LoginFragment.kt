@@ -59,6 +59,7 @@ class LoginFragment : Fragment() {
             }
         }
 
+
         //viewModel.addProductDetails()
         //viewModel.loadProductDetailsFromCategory(PERSONAL_CARE)
 

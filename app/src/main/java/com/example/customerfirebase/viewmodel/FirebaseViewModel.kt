@@ -30,10 +30,10 @@ constructor(
 ) : ViewModel() {
     val TAG = "LoginFragment"
     var productList = MutableLiveData<ArrayList<ProductDetails>>()
-    var newProductList = arrayListOf<ProductDetails>()
+
 
     var customerList = MutableLiveData<ArrayList<FirestoreCustomerDetails>>()
-    var newCustomerList = arrayListOf<FirestoreCustomerDetails>()
+
 
 
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
@@ -232,6 +232,7 @@ constructor(
 
     fun loadCustomerFromFirestore() {
         val customerRef = firebaseFireStore.collection(CUSTOMER_DETAILS_REF)
+        val newCustomerList = arrayListOf<FirestoreCustomerDetails>()
         customerRef.get().addOnSuccessListener { documents ->
             if (documents != null) {
                 Log.d(TAG, "Document Product Snapshot Data: ")
@@ -251,15 +252,17 @@ constructor(
     }
 
 
-    fun loadProductDetailsFromCategory(category: String) {
-        newProductList.clear()
+    fun loadProductDetailsFromCategory(category: String, customerId: String) {
+        val newProductList = arrayListOf<ProductDetails>()
         val productRef = firebaseFireStore.collection(PRODUCT)
         productRef.get().addOnSuccessListener { documents ->
             if (documents != null) {
                 Log.d(TAG, "Document Product Snapshot Data: ")
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-                    if (category == document.getString("productCategory")) {
+                    if (category == document.getString("productCategory") && customerId == document.getString(
+                            "customerId")
+                    ) {
                         val productName = document.getString("productName")
                         val productQuantity = document.getString("productQuantity")
                         val productPrice = document.getString("productPrice")
@@ -313,7 +316,9 @@ constructor(
                 Log.d(TAG,
                     "DocumentSnapshot Product Details successfully written!")
                 val action =
-                    ProductInsertFragmentDirections.actionProductInsertFragmentToProductFragment()
+                    ProductInsertFragmentDirections.actionProductInsertFragmentToProductFragment(
+                        category,
+                        customerId)
                 navController.navigate(action)
             }
             .addOnFailureListener { e ->
