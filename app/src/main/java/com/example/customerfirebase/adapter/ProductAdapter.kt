@@ -12,7 +12,7 @@ import com.google.android.material.textview.MaterialTextView
 
 
 class ProductAdapter(
-    private val listener: OnItemClickListener,
+    private val listener: OnClickListener,
     val context: Context,
     val list: ArrayList<ProductDetails>,
 ) : RecyclerView.Adapter<ProductAdapter.TasksViewHolder>() {
@@ -28,7 +28,14 @@ class ProductAdapter(
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         val productDetails = list[position]
-                        listener.onItemClick(productDetails)
+                        listener.onClick(productDetails)
+                    }
+                }
+                btnProductItemDisplay.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val productDetails = list[position]
+                        listener.onClick(productDetails)
                     }
                 }
             }
@@ -44,9 +51,10 @@ class ProductAdapter(
 
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(productDetails: ProductDetails)
+    interface OnClickListener {
+        fun onClick(productDetails: ProductDetails)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
         val binding =

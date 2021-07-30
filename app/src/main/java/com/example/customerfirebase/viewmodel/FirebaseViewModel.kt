@@ -211,10 +211,12 @@ constructor(
                 Log.d(TAG, "Document Snapshot Data: ${document.data}")
                 val ccid = document.getString("cid")
                 val ccpass = document.getString("cpass")
+                val ccname = document.getString("cname")
                 if (ccid == id && ccpass == pass) {
                     Log.d(TAG, "User Valid")
                     val action =
-                        LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment()
+                        LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment(
+                            ccname)
                     navController.navigate(action)
 
                 } else {
@@ -252,7 +254,7 @@ constructor(
     }
 
 
-    fun loadProductDetailsFromCategory(category: String, customerId: String) {
+    fun loadProductDetailsFromCategory(customerId: String) {
         val newProductList = arrayListOf<ProductDetails>()
         val productRef = firebaseFireStore.collection(PRODUCT)
         productRef.get().addOnSuccessListener { documents ->
@@ -260,7 +262,7 @@ constructor(
                 Log.d(TAG, "Document Product Snapshot Data: ")
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-                    if (category == document.getString("productCategory") && customerId == document.getString(
+                    if (customerId == document.getString(
                             "customerId")
                     ) {
                         val productName = document.getString("productName")
@@ -276,11 +278,13 @@ constructor(
                         Log.d(TAG, "Product Price: " + productPrice)
                         Log.d(TAG, "Product Total: " + productTotal)
                         Log.d(TAG, "Product Category: " + productCategory)
+                    } else {
+                        newProductList.clear()
+                        productList.value = null
                     }
                 }
             }
             Log.d(TAG, "Product Details Document Snapshot")
-
 
         }.addOnFailureListener { exception ->
             Log.d(TAG, "get failed with", exception)
@@ -299,6 +303,7 @@ constructor(
         price: String,
         total: String,
         customerId: String,
+        customerDetails: FirestoreCustomerDetails,
         navController: NavController,
     ) {
         val product = Product()
@@ -316,9 +321,9 @@ constructor(
                 Log.d(TAG,
                     "DocumentSnapshot Product Details successfully written!")
                 val action =
-                    ProductInsertFragmentDirections.actionProductInsertFragmentToProductFragment(
-                        category,
-                        customerId)
+                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
+                        customerDetails
+                    )
                 navController.navigate(action)
             }
             .addOnFailureListener { e ->

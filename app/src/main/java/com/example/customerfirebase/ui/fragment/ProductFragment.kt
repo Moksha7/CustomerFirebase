@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.customerfirebase.adapter.ProductAdapter
 import com.example.customerfirebase.databinding.FragmentProductBinding
@@ -19,7 +17,7 @@ import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
+class ProductFragment : Fragment(), ProductAdapter.OnClickListener {
     val TAG = "Product Fragment"
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
@@ -32,17 +30,17 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        viewModel.loadProductDetailsFromCategory(category, customerId)
+        viewModel.loadProductDetailsFromCategory(customerId)
         loadProductList(viewModel)
         binding.productRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.productRecyclerView.setHasFixedSize(true)
 
-        binding.fabAdd.setOnClickListener {
+        /*binding.fabAdd.setOnClickListener {
             val action =
                 ProductFragmentDirections.actionProductFragmentToProductInsertFragment(category,
                     customerId)
             navController.navigate(action)
-        }
+        }*/
     }
 
     override fun onCreateView(
@@ -64,9 +62,9 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
 
-        val safeArgs: ProductFragmentArgs by navArgs()
+        /*val safeArgs: ProductFragmentArgs by navArgs()
         category = safeArgs.productDetails
-        customerId = safeArgs.categoryId
+        customerId = safeArgs.categoryId*/
 
         return binding.root
     }
@@ -86,11 +84,11 @@ class ProductFragment : Fragment(), ProductAdapter.OnItemClickListener {
     }
 
 
-    override fun onItemClick(productDetails: ProductDetails) {
-        val action =
+    override fun onClick(productDetails: ProductDetails) {
+        /* val action =
             ProductFragmentDirections.actionProductFragmentToProductDetailsFragment(productDetails)
         navController.navigate(action)
-        Toast.makeText(context, productDetails.productName, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, productDetails.productName, Toast.LENGTH_LONG).show()*/
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.customerfirebase.ui.fragment
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.customerfirebase.adapter.CustomerAdapter
 import com.example.customerfirebase.databinding.FragmentCustomerDashboardBinding
@@ -55,7 +57,11 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
             container,
             false
         )
-        activity?.setTitle("Customer List")
+
+
+        val safeArgs: CustomerDashboardFragmentArgs by navArgs()
+        val customerName = safeArgs.customerName
+        activity?.setTitle(customerName)
 
         /* _collapsebinding = CollapsingToolbarBinding.bind(view)
 
@@ -63,8 +69,6 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
 
         viewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
-
-
 
         return binding.root
     }
@@ -95,6 +99,21 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
             customerDetails.customerName + "  " + customerDetails.customerId,
             Toast.LENGTH_LONG).show()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireView().isFocusableInTouchMode = true
+        requireView().requestFocus()
+        requireView().setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (event.action === KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                // handle back button's click listener
+                val a = CustomerDashboardFragmentDirections.actionCustomerDashboardFragmentSelf()
+                navController.navigate(a)
+                return@OnKeyListener true
+            }
+            false
+        })
     }
 
 

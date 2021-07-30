@@ -12,10 +12,10 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/background_lightgrey_transparent"
         android:theme="@style/AppTheme.NoActionbar">
 
-        <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.google.android.material.appbar.AppBarLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,9 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:background="@color/colorPrimary"
-                    android:padding="5dp"
-                    app:layout_collapseMode="pin"
-                    app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
+                    android:padding="2dp">
 
 
                     <androidx.cardview.widget.CardView
@@ -154,17 +152,53 @@
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="2dp"
+            android:background="@drawable/blue_outline"
+            android:padding="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/mtvNoProductFound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_outline"
+                android:text="@string/no_product_found"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textsize_xxlarge"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewProduct"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:scrollbarSize="7dp"
+                android:scrollbarThumbVertical="@android:color/darker_gray"
+                android:scrollbars="vertical"
+                android:visibility="visible"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAddCategory"
+            android:id="@+id/fabAddProduct"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
+            android:background="@color/colorPrimary"
             android:src="@drawable/ic_add" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -35,27 +35,6 @@
             app:destination="@id/customerDashboardFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/productFragment"
-        android:name="com.example.customerfirebase.ui.fragment.ProductFragment"
-        tools:layout="@layout/fragment_product">
-        <argument
-            android:name="productDetails"
-            android:defaultValue="abc"
-            app:argType="string"
-            app:nullable="false" />
-        <argument
-            android:name="categoryId"
-            android:defaultValue="abc"
-            app:argType="string"
-            app:nullable="false" />
-        <action
-            android:id="@+id/action_productFragment_to_productDetailsFragment"
-            app:destination="@id/productDetailsFragment" />
-        <action
-            android:id="@+id/action_productFragment_to_productInsertFragment"
-            app:destination="@id/productInsertFragment" />
-    </fragment>
 
     <fragment
         android:id="@+id/productDetailsFragment"
@@ -66,57 +45,61 @@
             android:defaultValue="@null"
             app:argType="com.example.customerfirebase.model.ProductDetails"
             app:nullable="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/categoryFragment"
-        android:name="com.example.customerfirebase.ui.fragment.CategoryFragment"
-        >
-        <argument
-            android:name="categoryId"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
         <action
-            android:id="@+id/action_categoryFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            android:id="@+id/action_productDetailsFragment_to_customerDetailsFragment"
+            app:destination="@id/customerDetailsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/productInsertFragment"
         android:name="com.example.customerfirebase.ui.fragment.ProductInsertFragment">
         <argument
-            android:name="category"
+            android:name="customerDetails"
             android:defaultValue="@null"
-            app:argType="string"
+            app:argType="com.example.customerfirebase.model.FirestoreCustomerDetails"
             app:nullable="true" />
-        <argument
-            android:name="categoryId"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
+
         <action
-            android:id="@+id/action_productInsertFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            android:id="@+id/action_productInsertFragment_to_customerDetailsFragment"
+            app:destination="@id/customerDetailsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/customerDashboardFragment"
         android:name="com.example.customerfirebase.ui.fragment.CustomerDashboardFragment">
+
+        <argument
+            android:name="customerName"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
         <action
             android:id="@+id/action_customerDashboardFragment_to_customerRegistrationFragment"
             app:destination="@id/customerRegistrationFragment" />
         <action
             android:id="@+id/action_customerDashboardFragment_to_customerDetailsFragment"
             app:destination="@id/customerDetailsFragment" />
+        <action
+            android:id="@+id/action_customerDashboardFragment_self"
+            app:destination="@id/customerDashboardFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/customerDetailsFragment"
         android:name="com.example.customerfirebase.ui.fragment.CustomerDetailsFragment">
+
         <argument
             android:name="customerDetails"
             android:defaultValue="@null"
             app:argType="com.example.customerfirebase.model.FirestoreCustomerDetails"
             app:nullable="true" />
+
+
         <action
-            android:id="@+id/action_customerDetailsFragment_to_categoryFragment"
-            app:destination="@id/categoryFragment" />
+            android:id="@+id/action_customerDetailsFragment_to_productInsertFragment"
+            app:destination="@id/productInsertFragment" />
+        <action
+            android:id="@+id/action_customerDetailsFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

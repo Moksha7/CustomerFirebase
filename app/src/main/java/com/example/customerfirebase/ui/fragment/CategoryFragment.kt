@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import com.example.customerfirebase.R
 import com.example.customerfirebase.databinding.FragmentSelectCategoryBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -40,22 +39,22 @@ class CategoryFragment : Fragment(),
             false
         )
 
-        val safeArgs: CategoryFragmentArgs by navArgs()
+        /*val safeArgs: CategoryFragmentArgs by navArgs()
         val categoryId = safeArgs.categoryId
-
+*/
         setUpSpinner()
 
 
         binding.mbLoadProduct.setOnClickListener {
             val category = binding.categorySpinner.selectedItem.toString()
-            val action =
-                categoryId?.let { it1 ->
-                    CategoryFragmentDirections.actionCategoryFragmentToProductFragment(category,
-                        it1)
-                }
-            if (action != null) {
-                navController.navigate(action)
-            }
+            /* val action =
+                 categoryId?.let { it1 ->
+                     CategoryFragmentDirections.actionCategoryFragmentToProductFragment(category,
+                         it1)
+                 }
+             if (action != null) {
+                 navController.navigate(action)
+             }*/
         }
 
 
