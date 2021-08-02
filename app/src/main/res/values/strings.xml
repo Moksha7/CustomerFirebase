@@ -61,4 +61,5 @@
     <string name="customer_name">Customer Name</string>
     <string name="no_product_found">No Product Found</string>
     <string name="product_category">Product Category :</string>
+    <string name="click_here_for_more_info">Click here for more info</string>
 </resources>

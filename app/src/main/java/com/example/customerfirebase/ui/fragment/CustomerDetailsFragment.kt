@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.customerfirebase.adapter.ProductAdapter
 import com.example.customerfirebase.databinding.FragmentCustomerDetailsBinding
 import com.example.customerfirebase.model.FirestoreCustomerDetails
@@ -33,7 +33,6 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var viewModel: CustomerRegisterViewModel
     private lateinit var firebaseViewModel: FirebaseViewModel
-    var category: String = ""
     var customerId: String = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -139,9 +138,8 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
                 binding.recyclerViewProduct.visibility = View.GONE
             }
         })
-        binding.recyclerViewProduct.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewProduct.layoutManager = GridLayoutManager(context, 2)
         binding.recyclerViewProduct.setHasFixedSize(true)
-
 
     }
 

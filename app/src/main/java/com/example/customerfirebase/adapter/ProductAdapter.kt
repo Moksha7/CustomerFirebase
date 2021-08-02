@@ -1,14 +1,23 @@
 package com.example.customerfirebase.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.customerfirebase.R
 import com.example.customerfirebase.databinding.ProductItemDetailsBinding
 import com.example.customerfirebase.model.ProductDetails
 import com.google.android.material.textview.MaterialTextView
+import java.io.ByteArrayOutputStream
+import java.util.*
 
 
 class ProductAdapter(
@@ -21,6 +30,7 @@ class ProductAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         internal var mtvProductName: MaterialTextView
+        internal var imageProduct: ImageView
 
         init {
             binding.apply {
@@ -41,14 +51,47 @@ class ProductAdapter(
             }
             mtvProductName =
                 itemView.findViewById(R.id.mtvProductName) // Initialize your All views prensent in list items
+            imageProduct =
+                itemView.findViewById(R.id.image_product)
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun bind(position: Int) {
             binding.apply {
+//                val newHeight : Int = 80
+//                imageProduct.layoutParams.height = newHeight
+                val bmp = stringToBitMap(list[position].productImageUrl)
                 mtvProductName.text = list[position].productName
+                imageProduct.setImageBitmap(bmp)
+                Glide.with(context).load(list[position].productImageUrl).into(imageProduct)
             }
         }
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun BitMapToString(bitmap: Bitmap): String {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.getEncoder().encodeToString(b)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun stringToBitMap(string: String): Bitmap? {
+        return try {
+            val imageBytes = Base64.getDecoder().decode(string)
+            val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+            scaleToFitHeight(image, 80)
+        } catch (e: Exception) {
+            Log.d("Image", e.message.toString())
+            return null
+        }
+    }
+
+    fun scaleToFitHeight(b: Bitmap, height: Int): Bitmap {
+        val factor = height / b.height.toFloat()
+        return Bitmap.createScaledBitmap(b, (b.width * factor).toInt(), height, true)
     }
 
     interface OnClickListener {
@@ -62,6 +105,7 @@ class ProductAdapter(
         return TasksViewHolder(binding)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
         holder.bind(position)
     }

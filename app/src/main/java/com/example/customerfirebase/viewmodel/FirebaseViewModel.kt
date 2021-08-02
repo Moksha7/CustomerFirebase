@@ -20,6 +20,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 var maxid = 0
+var pid = 0
 @HiltViewModel
 class FirebaseViewModel @Inject
 constructor(
@@ -279,8 +280,8 @@ constructor(
                         Log.d(TAG, "Product Total: " + productTotal)
                         Log.d(TAG, "Product Category: " + productCategory)
                     } else {
-                        newProductList.clear()
-                        productList.value = null
+
+
                     }
                 }
             }
@@ -296,7 +297,7 @@ constructor(
     }
 
 
-    fun addProductDetails(
+    fun addProductDetailsWithId(
         name: String,
         category: String,
         quantity: String,
@@ -306,17 +307,47 @@ constructor(
         customerDetails: FirestoreCustomerDetails,
         navController: NavController,
     ) {
-        val product = Product()
-        product.productName = name
-        product.productTotal = total
-        product.productQuantity = quantity
-        product.productCategory = category
-        product.productPrice = price
-        product.customerId = customerId
 
-        dbRepository.insertProduct(product)
-        firebaseFireStore.collection(PRODUCT).document()
-            .set(product)
+        firebaseFireStore.collection(PRODUCT)
+            .orderBy("productId", Query.Direction.DESCENDING).limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val id = document.id
+                    pid += id.toInt()
+                    addProductDetails(pid + 1,
+                        name,
+                        category,
+                        quantity,
+                        price,
+                        total,
+                        customerId,
+                        customerDetails,
+                        navController)
+                }
+            }
+        //addProductDetails(1000 ,name, category, quantity, price, total, customerId, customerDetails, navController)
+
+    }
+
+
+    fun addProductDetails(
+        pid: Int,
+        name: String,
+        category: String,
+        quantity: String,
+        price: String,
+        total: String,
+        customerId: String,
+        customerDetails: FirestoreCustomerDetails,
+        navController: NavController,
+    ) {
+        // val productDetails = ProductDetails(pid.toLong(),category,name,quantity,price,total,customerId,"","","")
+        val productDetails =
+            Product(pid, category, name, quantity, price, total, customerId, "", "", "")
+        //dbRepository.insertProduct(productDetails)
+        firebaseFireStore.collection(PRODUCT).document(pid.toString())
+            .set(productDetails)
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Product Details successfully written!")

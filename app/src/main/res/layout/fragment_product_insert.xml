@@ -79,28 +79,28 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_login_firebase_logo" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_large"
+            android:id="@+id/constraint_spinner"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="@dimen/margin_large"
             android:background="@drawable/blue_outline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_insert_product">
 
             <Spinner
                 android:id="@+id/sCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@android:drawable/btn_dropdown"
+                style="@style/Widget.AppCompat.Spinner.DropDown"
+                android:spinnerMode="dropdown"
+                android:theme="@style/Theme.MaterialComponents.Light"
                 android:padding="10dp"
-                app:layout_constraintLeft_toLeftOf="@id/constraint_spinner"
-                app:layout_constraintRight_toRightOf="@id/constraint_spinner"
+                app:layout_constraintEnd_toEndOf="@id/constraint_spinner"
+                app:layout_constraintStart_toStartOf="@id/constraint_spinner"
                 app:layout_constraintTop_toTopOf="@id/constraint_spinner" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <!--til_login_email-->
         <com.google.android.material.textfield.TextInputLayout

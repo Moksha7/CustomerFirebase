@@ -12,4 +12,7 @@ data class ProductDetails(
     var productPrice: String = "",
     var productTotal: String = "",
     var customerId: String = "",
+    var productOrderDate: String = "",
+    var productDeliveredDate: String = "",
+    var productImageUrl: String = "",
 ) : Parcelable

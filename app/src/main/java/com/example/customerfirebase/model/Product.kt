@@ -29,4 +29,10 @@ data class Product(
     var productTotal: String = "",
     @ColumnInfo(name = "customerId")
     var customerId: String = "",
+    @ColumnInfo(name = "productOrderDate")
+    var productOrderDate: String = "",
+    @ColumnInfo(name = "productDeliveredDate")
+    var productDeliveredDate: String = "",
+    @ColumnInfo(name = "productImageUrl")
+    var productImageUrl: String = "",
 ) : Parcelable

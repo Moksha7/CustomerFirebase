@@ -10,6 +10,7 @@ import com.example.customerfirebase.databinding.CustomerItemBinding
 import com.example.customerfirebase.model.FirestoreCustomerDetails
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
+import java.util.*
 
 
 class CustomerAdapter(
@@ -69,6 +70,7 @@ class CustomerAdapter(
         holder.mtvCustomerAddress.text = list[position].customerAddress
         holder.mtvCustomerDistrict.text = list[position].customerCity
     }
+
 
     override fun getItemCount(): Int {
         return list.count()

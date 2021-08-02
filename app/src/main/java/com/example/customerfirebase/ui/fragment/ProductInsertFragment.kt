@@ -69,7 +69,7 @@ class ProductInsertFragment : Fragment() {
             val total = tietProductTotal.text.toString()
 
             if (customerDetails != null) {
-                viewModel.addProductDetails(productName,
+                viewModel.addProductDetailsWithId(productName,
                     category,
                     quantity,
                     price,
@@ -84,12 +84,13 @@ class ProductInsertFragment : Fragment() {
 
     private fun setUpSpinner() {
         val spinner = binding.sCategory
+        binding.sCategory.prompt = "Choose Category"
 
         context?.let {
             ArrayAdapter.createFromResource(
                 it,
                 R.array.category_array,
-                android.R.layout.simple_spinner_item
+                android.R.layout.simple_spinner_dropdown_item
             ).also { adapter ->
                 // Specify the layout to use when the list of choices appears
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
