@@ -9,4 +9,8 @@
     <color name="dark_grey">#464E5B</color>
     <color name="seventy_transparent_white">#70EAEFF6</color>
     <color name="incharge_dark_grey">#312D2C</color>
+    <color name="md_blue_200">#03A9F4</color>
+    <color name="white_93">#E4D6D5</color>
+    <color name="white_70">#BBA7A6</color>
+    <color name="background800">#271C1B</color>
 </resources>

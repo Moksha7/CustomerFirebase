@@ -305,6 +305,7 @@ constructor(
         total: String,
         customerId: String,
         customerDetails: FirestoreCustomerDetails,
+        dateTime: String,
         navController: NavController,
     ) {
 
@@ -323,6 +324,7 @@ constructor(
                         total,
                         customerId,
                         customerDetails,
+                        dateTime,
                         navController)
                 }
             }
@@ -340,11 +342,12 @@ constructor(
         total: String,
         customerId: String,
         customerDetails: FirestoreCustomerDetails,
+        dateTime: String,
         navController: NavController,
     ) {
         // val productDetails = ProductDetails(pid.toLong(),category,name,quantity,price,total,customerId,"","","")
         val productDetails =
-            Product(pid, category, name, quantity, price, total, customerId, "", "", "")
+            Product(pid, category, name, quantity, price, total, customerId, dateTime, "", "")
         //dbRepository.insertProduct(productDetails)
         firebaseFireStore.collection(PRODUCT).document(pid.toString())
             .set(productDetails)

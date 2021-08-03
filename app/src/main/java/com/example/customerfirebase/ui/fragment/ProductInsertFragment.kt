@@ -1,21 +1,30 @@
 package com.example.customerfirebase.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.customerfirebase.R
 import com.example.customerfirebase.databinding.FragmentProductInsertBinding
 import com.example.customerfirebase.model.ProductDetails
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import com.example.customerfirebase.viewmodel.ProductDetailsViewModel
+import com.skydoves.powerspinner.IconSpinnerAdapter
+import com.skydoves.powerspinner.SpinnerAnimation
+import com.skydoves.powerspinner.SpinnerGravity
+import com.skydoves.powerspinner.createPowerSpinnerView
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 
 @AndroidEntryPoint
@@ -23,6 +32,7 @@ class ProductInsertFragment : Fragment() {
     private var _binding: FragmentProductInsertBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+    var category = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,14 +70,18 @@ class ProductInsertFragment : Fragment() {
     private fun saveProductInsert(viewModel: FirebaseViewModel) {
         val safeArgs: ProductInsertFragmentArgs by navArgs()
         val customerDetails = safeArgs.customerDetails
-        var category = binding.sCategory.selectedItem.toString()
 
         binding.apply {
             val productName = tietProductName.text.toString()
             val quantity = tietProductQuantity.text.toString()
             val price = tietProductPrice.text.toString()
             val total = tietProductTotal.text.toString()
-
+            binding.sCategory.setOnSpinnerItemSelectedListener<String> { index, text ->
+                category = text
+            }
+            val currentDate = LocalDate.now()
+            val dateTime =
+                (currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))).toString()
             if (customerDetails != null) {
                 viewModel.addProductDetailsWithId(productName,
                     category,
@@ -76,6 +90,7 @@ class ProductInsertFragment : Fragment() {
                     total,
                     customerDetails.customerId.toString(),
                     customerDetails,
+                    dateTime,
                     navController)
 
             }
@@ -83,21 +98,43 @@ class ProductInsertFragment : Fragment() {
     }
 
     private fun setUpSpinner() {
-        val spinner = binding.sCategory
-        binding.sCategory.prompt = "Choose Category"
+        var spinner = binding.sCategory
+        spinner = context?.let {
+            createPowerSpinnerView(it) {
+                setSpinnerPopupWidth(300)
+                setSpinnerPopupHeight(350)
+                setArrowPadding(6)
+                setArrowAnimate(true)
+                setArrowAnimationDuration(200L)
+                setArrowGravity(SpinnerGravity.START)
+                context?.let { ContextCompat.getColor(it, R.color.colorPrimary) }
+                    ?.let { setArrowTint(it) }
+                setSpinnerPopupAnimation(SpinnerAnimation.BOUNCE)
+                setShowDivider(true)
+                setDividerColor(Color.WHITE)
+                setDividerSize(2)
 
-        context?.let {
-            ArrayAdapter.createFromResource(
-                it,
-                R.array.category_array,
-                android.R.layout.simple_spinner_dropdown_item
-            ).also { adapter ->
-                // Specify the layout to use when the list of choices appears
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                // Apply the adapter to the spinner
-                spinner.adapter = adapter
             }
-        }
+        }!!
+
+
+        val adapter = IconSpinnerAdapter(spinner)
+        spinner.setSpinnerAdapter(adapter)
+        spinner.getSpinnerRecyclerView().layoutManager = LinearLayoutManager(context)
+
+
+        /* context?.let {
+             ArrayAdapter.createFromResource(
+                 it,
+                 R.array.category_array,
+                 android.R.layout.simple_spinner_dropdown_item
+             ).also { adapter ->
+                 // Specify the layout to use when the list of choices appears
+                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                 // Apply the adapter to the spinner
+                 spinner.adapter = adapter
+             }
+         }*/
     }
 
     }

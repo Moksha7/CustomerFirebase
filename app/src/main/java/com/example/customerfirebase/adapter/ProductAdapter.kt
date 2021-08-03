@@ -1,6 +1,8 @@
 package com.example.customerfirebase.adapter
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -26,14 +28,14 @@ class ProductAdapter(
     val list: ArrayList<ProductDetails>,
 ) : RecyclerView.Adapter<ProductAdapter.TasksViewHolder>() {
 
-    inner class TasksViewHolder(private val binding: ProductItemDetailsBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class TasksViewHolder(private val binding: ProductItemDetailsBinding?) :
+        RecyclerView.ViewHolder(binding?.root!!) {
 
         internal var mtvProductName: MaterialTextView
         internal var imageProduct: ImageView
 
         init {
-            binding.apply {
+            binding?.apply {
                 root.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
@@ -41,7 +43,7 @@ class ProductAdapter(
                         listener.onClick(productDetails)
                     }
                 }
-                btnProductItemDisplay.setOnClickListener {
+                cardViewCustomer.setOnClickListener {
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         val productDetails = list[position]
@@ -68,6 +70,7 @@ class ProductAdapter(
         }
 
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun BitMapToString(bitmap: Bitmap): String {
@@ -100,10 +103,42 @@ class ProductAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
-        val binding =
-            ProductItemDetailsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return TasksViewHolder(binding)
+
+        val preferences: SharedPreferences =
+            context.getSharedPreferences("saveSpanCount", MODE_PRIVATE)
+        val spanCount = preferences.getInt("spanCount", 1)
+        if (spanCount == 2) {
+            val binding =
+                ProductItemDetailsBinding.inflate(LayoutInflater.from(parent.context),
+                    parent,
+                    false)
+            //changeView(binding)
+
+            return TasksViewHolder(binding)
+        } else {
+            val binding =
+                ProductItemDetailsBinding.inflate(LayoutInflater.from(parent.context),
+                    parent,
+                    false)
+            //changeView(binding)
+            return TasksViewHolder(binding)
+        }
+
+
     }
+
+
+    /*fun changeView(binding: ProductItemDetailsBinding) {
+        val preferences: SharedPreferences = context.getSharedPreferences("saveSpanCount", MODE_PRIVATE)
+        val spanCount = preferences.getInt("spanCount", 1)
+        if (spanCount == 2) {
+            binding.cardViewCustomer.setLayoutParams(ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT))
+        } else {
+            binding.cardViewCustomer.setLayoutParams(ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT))
+        }
+    }*/
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
@@ -113,6 +148,7 @@ class ProductAdapter(
     override fun getItemCount(): Int {
         return list.size
     }
+
 
     class DiffCallback : DiffUtil.ItemCallback<ProductDetails>() {
         override fun areItemsTheSame(oldItem: ProductDetails, newItem: ProductDetails) =

@@ -1,20 +1,24 @@
 package com.example.customerfirebase.ui.fragment
 
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.customerfirebase.adapter.ProductAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.customerfirebase.R
+import com.example.customerfirebase.adapter.Product1Adapter
 import com.example.customerfirebase.databinding.FragmentCustomerDetailsBinding
 import com.example.customerfirebase.model.FirestoreCustomerDetails
 import com.example.customerfirebase.model.ProductDetails
@@ -23,10 +27,12 @@ import com.example.customerfirebase.viewmodel.CustomerRegisterViewModel
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
-class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
+class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
     val TAG = "Customer Details Fragment"
     private var _binding: FragmentCustomerDetailsBinding? = null
     private val binding get() = _binding!!
@@ -34,6 +40,12 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
     private lateinit var viewModel: CustomerRegisterViewModel
     private lateinit var firebaseViewModel: FirebaseViewModel
     var customerId: String = ""
+    var spanCount: Int = 1
+    var preferences: SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
+    var cardViews: List<CardView>? = null
+    var adapter: Product1Adapter? = null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -68,6 +80,13 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
 
         //binding.mtvNoProductFound.visibility = View.GONE
 
+        preferences = context?.getSharedPreferences("saveSpanCount", MODE_PRIVATE)
+        editor = preferences!!.edit()
+        cardViews = ArrayList()
+
+        setHasOptionsMenu(true)
+
+        adapter = context?.let { Product1Adapter(this, it, ArrayList<ProductDetails>()) }
 
         /*(activity as AppCompatActivity?)!!.setSupportActionBar(binding.toolbar)*/
 
@@ -76,7 +95,19 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
 
 
         firebaseViewModel.loadProductDetailsFromCategory(customerId)
-        loadProductList(firebaseViewModel)
+        binding.recyclerViewProduct.adapter = adapter
+
+        if (spanCount == 2) {
+            loadProductList(firebaseViewModel)
+            binding.recyclerViewProduct.setLayoutManager(StaggeredGridLayoutManager(spanCount,
+                StaggeredGridLayoutManager.VERTICAL))
+            adapter?.notifyDataSetChanged()
+        } else {
+            loadProductList(firebaseViewModel)
+            binding.recyclerViewProduct.setLayoutManager(LinearLayoutManager(context))
+            binding.recyclerViewProduct.adapter = adapter
+            adapter?.notifyDataSetChanged()
+        }
 
 
         val customerDetails = FirestoreCustomerDetails(viewModel.customerId,
@@ -115,9 +146,58 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
 
         })
 
-
-
         return binding.root
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.product_list_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.mnu_product_list -> {
+                spanCount = preferences!!.getInt("spanCount", 1)
+                if (spanCount == 2) {
+                    item.setIcon(R.drawable.ic_list)
+                    binding.recyclerViewProduct.setLayoutManager(StaggeredGridLayoutManager(
+                        spanCount,
+                        StaggeredGridLayoutManager.VERTICAL))
+                    adapter?.notifyDataSetChanged()
+                } else {
+                    binding.recyclerViewProduct.setLayoutManager(LinearLayoutManager(context))
+                    binding.recyclerViewProduct.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                }
+                if (Objects.equals(item.icon.constantState,
+                        Objects.requireNonNull(context?.let { getDrawable(it, R.drawable.ic_grid) })
+                            ?.getConstantState())
+                ) {
+                    spanCount = 2
+                    item.setIcon(R.drawable.ic_list)
+                    binding.recyclerViewProduct.setLayoutManager(StaggeredGridLayoutManager(
+                        spanCount,
+                        StaggeredGridLayoutManager.VERTICAL))
+                    binding.recyclerViewProduct.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                } else {
+                    spanCount = 1
+                    item.setIcon(R.drawable.ic_grid)
+                    binding.recyclerViewProduct.setLayoutManager(LinearLayoutManager(context))
+                    binding.recyclerViewProduct.adapter = adapter
+                    adapter?.notifyDataSetChanged()
+                }
+                loadProductList(firebaseViewModel)
+                editor!!.putInt("spanCount", spanCount)
+                editor!!.apply()
+                adapter?.notifyDataSetChanged()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
@@ -131,15 +211,14 @@ class CustomerDetailsFragment : Fragment(), ProductAdapter.OnClickListener {
                 // binding.mtvNoProductFound.visibility = View.GONE
                 binding.recyclerViewProduct.visibility = View.VISIBLE
                 binding.recyclerViewProduct.adapter = context?.let { it1 ->
-                    ProductAdapter(this, it1, it)
+                    Product1Adapter(this, it1, it)
                 }
             } else {
                 //binding.mtvNoProductFound.visibility = View.VISIBLE
                 binding.recyclerViewProduct.visibility = View.GONE
             }
         })
-        binding.recyclerViewProduct.layoutManager = GridLayoutManager(context, 2)
-        binding.recyclerViewProduct.setHasFixedSize(true)
+        adapter?.notifyDataSetChanged()
 
     }
 
