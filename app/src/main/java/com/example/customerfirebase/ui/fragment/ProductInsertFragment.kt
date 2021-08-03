@@ -81,7 +81,7 @@ class ProductInsertFragment : Fragment() {
             }
             val currentDate = LocalDate.now()
             val dateTime =
-                (currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))).toString()
+                (currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))).toString()
             if (customerDetails != null) {
                 viewModel.addProductDetailsWithId(productName,
                     category,

@@ -13,6 +13,7 @@ import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
 import com.example.customerfirebase.ui.fragment.ProductInsertFragmentDirections
 import com.example.customerfirebase.utils.Constant.CUSTOMER_DETAILS_REF
 import com.example.customerfirebase.utils.Constant.PRODUCT
+import com.example.customerfirebase.utils.Constant.REMAINDER
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 
 var maxid = 0
 var pid = 0
+var rid = 0
 @HiltViewModel
 class FirebaseViewModel @Inject
 constructor(
@@ -354,6 +356,100 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Product Details successfully written!")
+                loadProductDetails(pid.toString(), customerDetails, navController)
+                /* val action =
+                     ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
+                         customerDetails
+                     )
+                 navController.navigate(action)*/
+            }
+            .addOnFailureListener { e ->
+                Log.d(TAG,
+                    "Error writing ProductDetails document",
+                    e)
+            }
+
+
+    }
+
+
+    fun loadProductDetails(
+        productId: String,
+        customerDetails: FirestoreCustomerDetails,
+        navController: NavController,
+    ) {
+        val productRef = firebaseFireStore.collection(PRODUCT)
+        productRef.get().addOnSuccessListener { documents ->
+            if (documents != null) {
+                Log.d(TAG, "Document Product Snapshot Data: ")
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    if (productId == document.get(
+                            "productId").toString()
+                    ) {
+                        val productDetails = document.toObject(ProductDetails::class.java)
+                        insertRemainderIntoFireStoreById(customerDetails,
+                            productDetails,
+                            navController)
+                    }
+                }
+            }
+            Log.d(TAG, "Product Details Document Snapshot")
+
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
+
+    }
+
+
+    fun insertRemainderIntoFireStoreById(
+        customerDetails: FirestoreCustomerDetails,
+        productDetails: ProductDetails,
+        navController: NavController,
+    ) {
+
+        firebaseFireStore.collection(REMAINDER)
+            .orderBy("remainderId", Query.Direction.DESCENDING).limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val id = document.id
+                    rid += id.toInt()
+                    insertRemainderIntoFireStore(rid + 1,
+                        customerDetails,
+                        productDetails,
+                        navController)
+                }
+            }
+        //insertRemainderIntoFireStore(1000,customerDetails, productDetails,navController)
+
+    }
+
+    fun insertRemainderIntoFireStore(
+        id: Int,
+        customerDetails: FirestoreCustomerDetails,
+        productDetails: ProductDetails,
+        navController: NavController,
+    ) {
+        val remainderDetails = Remainder(id,
+            productDetails.productId.toString(),
+            productDetails.productCategory,
+            productDetails.productName,
+            productDetails.productQuantity,
+            productDetails.productPrice,
+            productDetails.productTotal,
+            productDetails.customerId,
+            customerDetails.customerName,
+            productDetails.productOrderDate,
+            productDetails.productDeliveredDate,
+            productDetails.productImageUrl)
+        //dbRepository.insertProduct(productDetails)
+        firebaseFireStore.collection(REMAINDER).document(id.toString())
+            .set(remainderDetails)
+            .addOnCompleteListener {
+                Log.d(TAG,
+                    "DocumentSnapshot Remainder Details successfully written!")
                 val action =
                     ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
                         customerDetails
@@ -365,8 +461,6 @@ constructor(
                     "Error writing ProductDetails document",
                     e)
             }
-
-
     }
 
 }
