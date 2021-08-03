@@ -16,6 +16,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductOrderDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:drawableEnd="@drawable/ic_date"
+            android:padding="10dp"
+            android:text="date"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:textColor="#221D1D"
+            android:textColorHighlight="@color/colorPrimary"
+            android:textSize="@dimen/textsize_medium"
+            android:textStyle="italic|bold"
+            app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
+            app:layout_constraintTop_toTopOf="@id/constraint_customer_item1" />
+
         <ImageView
             android:id="@+id/image_product"
             android:layout_width="match_parent"
@@ -25,7 +42,7 @@
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
-            app:layout_constraintTop_toTopOf="@id/constraint_customer_item1"
+            app:layout_constraintTop_toBottomOf="@id/mtvProductOrderDate"
             tools:srcCompat="@tools:sample/avatars" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -57,29 +74,27 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/mtvProductPrice"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:text="@string/price"
-            android:textAlignment="center"
             android:textColor="#221D1D"
-            android:textSize="@dimen/textsize_xlarge"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="@dimen/textsize_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/mtvProductTotal"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="@string/name"
-            android:textAlignment="center"
+            android:background="@color/colorPrimary"
             android:textColor="#221D1D"
-            android:textSize="@dimen/textsize_xlarge"
+            android:text="@string/total"
+            android:textSize="@dimen/textsize_medium"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mtvProductPrice" />
+            app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
+            app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

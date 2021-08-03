@@ -37,6 +37,8 @@ class Product1Adapter(
             itemView.findViewById(R.id.mtvProductPrice)
         var mtvProductTotal: MaterialTextView =
             itemView.findViewById(R.id.mtvProductTotal)
+        var mtvProductOrderDate: MaterialTextView =
+            itemView.findViewById(R.id.mtvProductOrderDate)
         var imageProduct: ImageView = itemView.findViewById(R.id.image_product)
         var cardProduct: CardView = itemView.findViewById(R.id.card_view_customer)
 
@@ -57,6 +59,7 @@ class Product1Adapter(
             mtvProductQuantity.text = "Quantity : " + recyclerViewModel.productQuantity
             mtvProductPrice.text = "Price : " + recyclerViewModel.productPrice
             mtvProductTotal.text = "Total : " + recyclerViewModel.productTotal
+            mtvProductOrderDate.text = recyclerViewModel.productOrderDate
             val bmp = stringToBitMap(list[position].productImageUrl)
             imageProduct.setImageBitmap(bmp)
             Glide.with(context).load(list[position].productImageUrl).into(imageProduct)

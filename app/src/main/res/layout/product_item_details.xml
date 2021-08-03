@@ -18,12 +18,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtvProductOrderDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_date"
+            android:padding="5dp"
+            android:text="date"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:textColor="#221D1D"
+            android:textColorHighlight="@color/colorPrimary"
+            android:textSize="@dimen/textsize_medium"
+            android:textStyle="italic|bold"
+            app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
+            app:layout_constraintLeft_toRightOf="@id/image_product"
+            app:layout_constraintTop_toTopOf="@id/constraint_customer_item1" />
+
         <ImageView
             android:id="@+id/image_product"
             android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_height="125dp"
             android:adjustViewBounds="true"
-            android:padding="10dp"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
             app:layout_constraintTop_toTopOf="@id/constraint_customer_item1"
@@ -33,24 +49,25 @@
             android:id="@+id/mtvProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:text="@string/name"
+            android:layout_marginStart="5dp"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="#221D1D"
+            android:padding="1dp"
             android:textSize="@dimen/textsize_xxlarge"
-            android:layout_margin="5dp"
+            android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@id/image_product"
-            app:layout_constraintTop_toTopOf="@id/constraint_customer_item1" />
+            app:layout_constraintTop_toBottomOf="@id/mtvProductOrderDate" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/mtvProductQuantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
             android:text="@string/quantity"
             android:textColor="#221D1D"
+            android:layout_marginStart="5dp"
+            android:padding="1dp"
             android:textSize="@dimen/textsize_xlarge"
             app:layout_constraintLeft_toRightOf="@id/image_product"
             app:layout_constraintTop_toBottomOf="@id/mtvProductName" />
@@ -59,11 +76,11 @@
             android:id="@+id/mtvProductPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="3dp"
             android:layout_marginStart="5dp"
-            android:padding="5dp"
             android:text="@string/price"
             android:textColor="#221D1D"
-            android:textSize="@dimen/textsize_xlarge"
+            android:textSize="@dimen/textsize_medium"
             app:layout_constraintLeft_toRightOf="@id/image_product"
             app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
 
@@ -71,13 +88,14 @@
             android:id="@+id/mtvProductTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:padding="5dp"
+            android:background="@color/colorPrimary"
             android:text="@string/total"
             android:textColor="#221D1D"
-            android:textSize="@dimen/textsize_xlarge"
-            app:layout_constraintLeft_toRightOf="@id/image_product"
-            app:layout_constraintTop_toBottomOf="@id/mtvProductPrice" />
+            android:padding="3dp"
+            android:textSize="@dimen/textsize_medium"
+            app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
+            app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
+            app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
