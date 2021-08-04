@@ -3,6 +3,7 @@ package com.example.customerfirebase.model
 import android.os.Parcelable
 
 @kotlinx.parcelize.Parcelize
+
 data class FirestoreCustomerDetails(
     var customerId: Long = 0,
     var customerName: String = "",

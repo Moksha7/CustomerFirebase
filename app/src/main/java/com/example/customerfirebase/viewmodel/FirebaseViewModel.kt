@@ -217,6 +217,9 @@ constructor(
                 val ccname = document.getString("cname")
                 if (ccid == id && ccpass == pass) {
                     Log.d(TAG, "User Valid")
+                    /* val action =
+                         LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment(
+                             ccname)*/
                     val action =
                         LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment(
                             ccname)
@@ -451,7 +454,7 @@ constructor(
                 Log.d(TAG,
                     "DocumentSnapshot Remainder Details successfully written!")
                 val action =
-                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
+                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailFragment(
                         customerDetails
                     )
                 navController.navigate(action)

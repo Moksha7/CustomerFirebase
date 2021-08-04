@@ -2,9 +2,7 @@ package com.example.customerfirebase.ui.fragment
 
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -13,8 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.customerfirebase.R
@@ -22,10 +19,8 @@ import com.example.customerfirebase.adapter.Product1Adapter
 import com.example.customerfirebase.databinding.FragmentCustomerDetailsBinding
 import com.example.customerfirebase.model.FirestoreCustomerDetails
 import com.example.customerfirebase.model.ProductDetails
-import com.example.customerfirebase.utils.AppBarStateChangeListener
 import com.example.customerfirebase.viewmodel.CustomerRegisterViewModel
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
-import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,11 +40,11 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
     var editor: SharedPreferences.Editor? = null
     var cardViews: List<CardView>? = null
     var adapter: Product1Adapter? = null
-
+    lateinit var customerDetails: FirestoreCustomerDetails
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+
 
     }
 
@@ -67,16 +62,22 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
         firebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
 
+        /* val navHostFragment =
+             activity?.supportFragmentManager?.findFragmentById(R.id.customerDetailsFragment)
+         navController = navHostFragment!!.findNavController()
+ */
+        /* val safeArgs: CustomerDetailFragmentArgs by navArgs()
+         val detailsCustomer = safeArgs.customerDetails*/
 
-        val safeArgs: CustomerDetailsFragmentArgs by navArgs()
-        val detailsCustomer = safeArgs.customerDetails
+        var b: Bundle? = this.arguments
+        customerDetails = b?.getParcelable("CustomerDetailsArgs")!!
 
-        binding.customerDetails = CustomerRegisterViewModel(detailsCustomer)
+        binding.customerDetails = CustomerRegisterViewModel(customerDetails)
 
-        viewModel = CustomerRegisterViewModel(detailsCustomer)
+        viewModel = CustomerRegisterViewModel(customerDetails)
 
         customerId = viewModel.customerId.toString()
-        Log.d(TAG, "Customer Id" + customerId.toString())
+        // Log.d(TAG, "Customer Id" + customerId.toString())
 
         //binding.mtvNoProductFound.visibility = View.GONE
 
@@ -90,8 +91,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
         /*(activity as AppCompatActivity?)!!.setSupportActionBar(binding.toolbar)*/
 
-        binding.collapsingToolbar.title = viewModel.customerName
-        binding.collapsingToolbar.setContentScrimColor(Color.GRAY)
+
 
 
         firebaseViewModel.loadProductDetailsFromCategory(customerId)
@@ -119,32 +119,28 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
             viewModel.customerMobile)
 
         binding.fabAddProduct.setOnClickListener {
+/*
+            val insertFragment = ProductInsertFragment()
+            val b = Bundle()
+            val CUSTOMER_DETAILS = "CustomerDetailsArgs"
+            b.putParcelable(CUSTOMER_DETAILS,customerDetails)
+            insertFragment.arguments=b
+
+            val fragmentManager: FragmentManager? = fragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(R.id.productInsertFragment, insertFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
+
+*/
+
 
             val action =
-                CustomerDetailsFragmentDirections.actionCustomerDetailsFragmentToProductInsertFragment(
+                CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductInsertFragment(
                     customerDetails)
-            navController.navigate(action)
+            findNavController().navigate(action)
         }
 
-        binding.appBarLayout.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
-            override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
-                if (state != null) {
-                    Log.d("State", state.name)
-                }
-                when (state) {
-                    State.COLLAPSED -> {
-                        activity?.setTitle(viewModel.customerName)
-                    }
-                    State.EXPANDED -> {
-                        activity?.setTitle("Customer Details")
-                    }
-                    State.IDLE -> {
-                        activity?.setTitle(viewModel.customerName)
-                    }
-                }
-            }
-
-        })
 
         return binding.root
     }
@@ -228,10 +224,11 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
 
     override fun onClick(productDetails: ProductDetails) {
+
         val action =
-            CustomerDetailsFragmentDirections.actionCustomerDetailsFragmentToProductDetailsFragment(
+            CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductDetailsFragment(
                 productDetails)
-        navController.navigate(action)
+        findNavController().navigate(action)
         Toast.makeText(context, productDetails.productName, Toast.LENGTH_LONG).show()
     }
 

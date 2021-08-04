@@ -92,7 +92,7 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
 
     override fun onClick(customerDetails: FirestoreCustomerDetails) {
         val action =
-            CustomerDashboardFragmentDirections.actionCustomerDashboardFragmentToCustomerDetailsFragment(
+            CustomerDashboardFragmentDirections.actionCustomerDashboardFragmentToCustomerDetailFragment(
                 customerDetails)
         navController.navigate(action)
         Toast.makeText(context,
