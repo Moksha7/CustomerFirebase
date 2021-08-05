@@ -102,10 +102,16 @@ class CustomerDetailFragment : Fragment() {
             bb.putParcelable(ORDER_DETAILS, customerDetailsArgs)
             orderDetails.arguments = bb
 
+            var remainderDetails = RemainderListFragment()
+            var bbb: Bundle = Bundle()
+            val REMAINDER_DETAILS = "CustomerDetailsArgs"
+            bb.putParcelable(REMAINDER_DETAILS, customerDetailsArgs)
+            remainderDetails.arguments = bb
+
             return when (position) {
                 0 -> orderDetails
                 1 -> customerDetails
-                2 -> customerDetails
+                2 -> remainderDetails
                 else -> customerDetails
             }
         }

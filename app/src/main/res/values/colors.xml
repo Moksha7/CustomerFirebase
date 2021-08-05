@@ -13,4 +13,5 @@
     <color name="white_93">#E4D6D5</color>
     <color name="white_70">#BBA7A6</color>
     <color name="background800">#271C1B</color>
+    <color name="surfaceTextColor">#000000</color>
 </resources>

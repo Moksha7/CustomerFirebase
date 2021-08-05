@@ -1,5 +1,6 @@
 package com.example.customerfirebase.model
 
+import android.annotation.SuppressLint
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -10,6 +11,7 @@ import com.example.customerfirebase.utils.Constant.PRODUCT_PRICE
 import com.example.customerfirebase.utils.Constant.PRODUCT_QUANTITY
 import com.example.customerfirebase.utils.Constant.PRODUCT_TOTAL
 import com.google.firebase.firestore.IgnoreExtraProperties
+import java.util.*
 
 @IgnoreExtraProperties
 @kotlinx.parcelize.Parcelize
@@ -17,6 +19,8 @@ import com.google.firebase.firestore.IgnoreExtraProperties
 data class Remainder(
     @PrimaryKey(autoGenerate = true)
     var remainderId: Int = 0,
+    @ColumnInfo(name = "orderId")
+    var orderId: String = "",
     @ColumnInfo(name = "productId")
     var productId: String = "",
     @ColumnInfo(name = PRODUCT_CATEGORY)
@@ -39,4 +43,19 @@ data class Remainder(
     var productDeliveredDate: String = "",
     @ColumnInfo(name = "productImageUrl")
     var productImageUrl: String = "",
+    @ColumnInfo(name = "remainderIdentifier")
+    var reminderIndentifier: String = UUID.randomUUID().toString(),
+    @SuppressLint("SimpleDateFormat")
+    @ColumnInfo(name = "remainderDate")
+    var remainderDate: String = "",
+    @ColumnInfo(name = "remainderTime")
+    var remainderTime: String = "",
+    @ColumnInfo(name = "remainderRepeat")
+    var remainderRepeat: Boolean = true,
+    @ColumnInfo(name = "remainderRepeatValue")
+    var remainderRepeatValue: Int = 1,
+    @ColumnInfo(name = "remainderRepeatUnit")
+    var remainderRepeatUnit: String = "Day",
+    @ColumnInfo(name = "remainderActive")
+    var remainderIsActive: Boolean = true,
 ) : Parcelable

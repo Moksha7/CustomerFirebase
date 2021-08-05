@@ -1,7 +1,13 @@
 package com.example.customerfirebase
 
 import android.app.Application
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Color
+import android.os.Build
+import androidx.core.content.ContextCompat
 import com.example.customerfirebase.db.CustomerDao
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
@@ -28,5 +34,28 @@ class CustomerApplication : Application() {
         customerDaoo = customerDao
         FirebaseApp.initializeApp(this)
 
+        createNotificationChannel(getString(R.string.reminder_notification_channel_id),
+            getString(R.string.reminder_notification_channel_name),
+            getString(R.string.reminder_notification_channel_description))
+    }
+
+    fun createNotificationChannel(channelId: String, channelName: String, description: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.apply {
+                enableLights(true)
+                lightColor = Color.BLUE
+                enableVibration(true)
+            }
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC)
+            notificationChannel.description = description
+            val notificationManager = ContextCompat.getSystemService(this.applicationContext,
+                NotificationManager::class.java
+            ) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
     }
 }

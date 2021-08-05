@@ -19,4 +19,10 @@
     <dimen name="textsize_4xlarge">40sp</dimen>
     <dimen name="textsize_5xlarge">48sp</dimen>
     <dimen name="textsize_6xlarge">56sp</dimen>
+
+    <dimen name="medium_margin">16dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="list_item_padding">8dp</dimen>
+    <dimen name="empty_notes_reminder_image_dimens">96dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

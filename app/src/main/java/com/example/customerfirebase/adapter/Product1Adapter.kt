@@ -73,6 +73,7 @@ class Product1Adapter(
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val recyclerViewModel = list[position]
+                    var b = false
                     val builder = AlertDialog.Builder(it.context)
                     val view = LayoutInflater.from(context).inflate(R.layout.dialog_order, null)
                     val mtvProductName: MaterialTextView =
@@ -95,6 +96,8 @@ class Product1Adapter(
                         arrayOf(InputFilterMinMax(1, recyclerViewModel.productQuantity.toInt()))
 
                     builder.setView(view)
+                    val alertDialog = builder.create()
+
                     mtvProductName.text = recyclerViewModel.productName
                     Glide.with(context).load(list[position].productImageUrl).into(imageProduct)
 
@@ -130,6 +133,7 @@ class Product1Adapter(
 
                     mbOrder.setOnClickListener {
                         if (metQuantity.text.toString().length.equals(0)) {
+                            b = false
                             return@setOnClickListener
                         } else {
                             val productId = recyclerViewModel.productId.toString()
@@ -160,12 +164,15 @@ class Product1Adapter(
                                 productOrderDate,
                                 navController,
                                 customerDetails)
-
+                            b = true
                         }
+
+                        if (b) {
+                            alertDialog.dismiss()
+                        }
+
                     }
 
-
-                    val alertDialog = builder.create()
                     alertDialog.show()
                 }
             }

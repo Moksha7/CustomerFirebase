@@ -1,7 +1,10 @@
 package com.example.customerfirebase.viewmodel
 
+import android.app.AlarmManager
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +15,7 @@ import com.example.customerfirebase.ui.fragment.CustomerDetailFragmentDirections
 import com.example.customerfirebase.ui.fragment.CustomerRegistrationFragmentDirections
 import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
 import com.example.customerfirebase.ui.fragment.ProductInsertFragmentDirections
+import com.example.customerfirebase.utils.AlarmUtil
 import com.example.customerfirebase.utils.Constant.CUSTOMER_DETAILS_REF
 import com.example.customerfirebase.utils.Constant.PRODUCT
 import com.example.customerfirebase.utils.Constant.REMAINDER
@@ -19,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 var maxid = 0
@@ -39,7 +45,9 @@ constructor(
     var customerList = MutableLiveData<ArrayList<FirestoreCustomerDetails>>()
 
     var orderList = MutableLiveData<ArrayList<OrderDetails>>()
+    var remainderList = MutableLiveData<ArrayList<RemainderDetails>>()
 
+    private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
         val customerData = CustomerData(id, name, pass)
@@ -329,6 +337,34 @@ constructor(
     }
 
 
+    fun loadRemainderListOfCustomer(customerId: String) {
+        val newRemainderList = arrayListOf<RemainderDetails>()
+        val remainderRef = firebaseFireStore.collection(REMAINDER)
+        remainderRef.get().addOnSuccessListener { documents ->
+            if (documents != null) {
+                Log.d(TAG, "Document Product Snapshot Data: ")
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    if (customerId == document.getString(
+                            "customerId")
+                    ) {
+                        val remainder = document.toObject(RemainderDetails::class.java)
+                        newRemainderList.add(remainder)
+                        remainderList.value = newRemainderList
+                    }
+                }
+            }
+            Log.d(TAG, "Remainder Details Document Snapshot")
+
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
+
+        Log.d(TAG, "Remainder List : " + remainderList.value)
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addOrderDetailsWithId(
         productId: String,
         productImage: String,
@@ -373,6 +409,7 @@ constructor(
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun addOrderDetails(
         orderId: Int,
         productId: String,
@@ -405,8 +442,8 @@ constructor(
             .set(orderDetails)
             .addOnCompleteListener {
                 Log.d(TAG,
-                    "DocumentSnapshot Product Details successfully written!")
-                loadProductDetails(pid.toString(), customerDetails, navController)
+                    "DocumentSnapshot Order Details successfully written!")
+                loadOrderDetails(orderId.toString(), customerDetails, navController)
             }
             .addOnFailureListener { e ->
                 Log.d(TAG,
@@ -489,28 +526,29 @@ constructor(
     }
 
 
-    fun loadProductDetails(
-        productId: String,
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun loadOrderDetails(
+        orderId: String,
         customerDetails: FirestoreCustomerDetails,
         navController: NavController,
     ) {
-        val productRef = firebaseFireStore.collection(PRODUCT)
-        productRef.get().addOnSuccessListener { documents ->
+        val orderRef = firebaseFireStore.collection("ORDER")
+        orderRef.get().addOnSuccessListener { documents ->
             if (documents != null) {
                 Log.d(TAG, "Document Product Snapshot Data: ")
                 for (document in documents) {
                     Log.d(TAG, "${document.id} => ${document.data}")
-                    if (productId == document.get(
-                            "productId").toString()
+                    if (orderId == document.get(
+                            "orderId").toString()
                     ) {
-                        val productDetails = document.toObject(ProductDetails::class.java)
+                        val orderDetails = document.toObject(OrderDetails::class.java)
                         insertRemainderIntoFireStoreById(customerDetails,
-                            productDetails,
+                            orderDetails,
                             navController)
                     }
                 }
             }
-            Log.d(TAG, "Product Details Document Snapshot")
+            Log.d(TAG, "Order Details Document Snapshot")
 
         }.addOnFailureListener { exception ->
             Log.d(TAG, "get failed with", exception)
@@ -519,9 +557,10 @@ constructor(
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun insertRemainderIntoFireStoreById(
         customerDetails: FirestoreCustomerDetails,
-        productDetails: ProductDetails,
+        orderDetails: OrderDetails,
         navController: NavController,
     ) {
 
@@ -534,7 +573,7 @@ constructor(
                     rid += id.toInt()
                     insertRemainderIntoFireStore(rid + 1,
                         customerDetails,
-                        productDetails,
+                        orderDetails,
                         navController)
                 }
             }
@@ -542,40 +581,127 @@ constructor(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun insertRemainderIntoFireStore(
         id: Int,
         customerDetails: FirestoreCustomerDetails,
-        productDetails: ProductDetails,
+        orderDetails: OrderDetails,
         navController: NavController,
     ) {
+        val calendar = Calendar.getInstance()
+        System.out.println("Original = " + calendar.time)
+        calendar.add(Calendar.SECOND, 20)
+        System.out.println("Updated  = " + calendar.time)
+
+        val currentDate: String =
+            SimpleDateFormat("EEE, d MMM yyyy", Locale.getDefault()).format(Date())
+        //val currentTime: String = SimpleDateFormat("h:mm a", Locale.getDefault()).format(Date())
+        //val currentTime: String = "5:15 PM"
+        val currentTime = SimpleDateFormat("h:mm a", Locale.getDefault()).format(calendar.time)
+
         val remainderDetails = Remainder(id,
-            productDetails.productId.toString(),
-            productDetails.productCategory,
-            productDetails.productName,
-            productDetails.productQuantity,
-            productDetails.productPrice,
-            productDetails.productTotal,
-            productDetails.customerId,
+            orderDetails.orderId.toString(),
+            orderDetails.productId.toString(),
+            orderDetails.productCategory,
+            orderDetails.productName,
+            orderDetails.productQuantity,
+            orderDetails.productPrice,
+            orderDetails.productTotal,
+            orderDetails.customerId,
             customerDetails.customerName,
-            productDetails.productOrderDate,
-            productDetails.productDeliveredDate,
-            productDetails.productImageUrl)
+            orderDetails.productOrderDate,
+            orderDetails.productDeliveredDate,
+            orderDetails.productImageUrl,
+            UUID.randomUUID().toString(),
+            currentDate,
+            currentTime,
+            true,
+            2,
+            "Minute",
+            true
+        )
         //dbRepository.insertProduct(productDetails)
         firebaseFireStore.collection(REMAINDER).document(id.toString())
             .set(remainderDetails)
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Remainder Details successfully written!")
-
+                getLatestRemainderIntoFireStore()
                 navController.navigate(CustomerDetailFragmentDirections.actionCustomerDetailFragmentSelf(
                     customerDetails))
             }
             .addOnFailureListener { e ->
                 Log.d(TAG,
-                    "Error writing ProductDetails document",
+                    "Error writing Remainder document",
                     e)
             }
     }
+
+
+    fun getLatestRemainderIntoFireStore() {
+        firebaseFireStore.collection(REMAINDER)
+            .orderBy("remainderId", Query.Direction.DESCENDING).limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val id = document.id
+                    rid += id.toInt()
+                    val remainderDetails = document.toObject(RemainderDetails::class.java)
+                    createReminderAlarm(remainderDetails)
+                }
+            }
+    }
+
+    fun createReminderAlarm(remainderDetails: RemainderDetails) {
+        if (remainderDetails.remainderIsActive) {
+            AlarmUtil.createAlarm(
+                context.applicationContext,
+                remainderDetails,
+                alarmManager
+            )
+        }
+        Log.d("FirebaseViewModel", "alarm created")
+    }
+
+
+    fun getRemainderList() {
+        val newRemainderList = arrayListOf<RemainderDetails>()
+        val remainderRef = firebaseFireStore.collection(REMAINDER)
+        remainderRef.get().addOnSuccessListener { documents ->
+            if (documents != null) {
+                Log.d(TAG, "Document Product Snapshot Data: ")
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    val remainder = document.toObject(RemainderDetails::class.java)
+                    newRemainderList.add(remainder)
+                    remainderList.value = newRemainderList
+                }
+            }
+            Log.d(TAG, "Remainder List Document Snapshot")
+
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
+
+        Log.d(TAG, "remainder List : " + remainderList.value)
+    }
+
+
+    fun cancelExistingAlarm(remainderDetails: RemainderDetails) {
+        AlarmUtil.cancelAlarm(
+            context.applicationContext,
+            remainderDetails,
+            alarmManager)
+    }
+
+    fun updateAlarm(reminder: RemainderDetails) {
+        if (reminder.remainderIsActive) {
+            createReminderAlarm(reminder)
+        } else {
+            cancelExistingAlarm(reminder)
+        }
+    }
+
 
 }
 
