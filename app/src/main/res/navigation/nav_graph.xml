@@ -124,5 +124,8 @@
         <action
             android:id="@+id/action_customerDetailFragment_to_productInsertFragment"
             app:destination="@id/productInsertFragment" />
+        <action
+            android:id="@+id/action_customerDetailFragment_self"
+            app:destination="@id/customerDetailFragment" />
     </fragment>
 </navigation>

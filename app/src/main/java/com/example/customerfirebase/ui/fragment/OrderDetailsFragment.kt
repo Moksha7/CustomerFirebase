@@ -15,10 +15,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.customerfirebase.R
-import com.example.customerfirebase.adapter.Product1Adapter
-import com.example.customerfirebase.databinding.FragmentCustomerDetailsBinding
+import com.example.customerfirebase.adapter.OrderAdapter
+import com.example.customerfirebase.databinding.FragmentOrderDetailsBinding
 import com.example.customerfirebase.model.FirestoreCustomerDetails
-import com.example.customerfirebase.model.ProductDetails
+import com.example.customerfirebase.model.OrderDetails
 import com.example.customerfirebase.viewmodel.CustomerRegisterViewModel
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,9 +27,9 @@ import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
-class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
+class OrderDetailsFragment : Fragment(), OrderAdapter.OnClickListener {
     val TAG = "Customer Details Fragment"
-    private var _binding: FragmentCustomerDetailsBinding? = null
+    private var _binding: FragmentOrderDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
     private lateinit var viewModel: CustomerRegisterViewModel
@@ -39,7 +39,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
     var preferences: SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
     var cardViews: List<CardView>? = null
-    var adapter: Product1Adapter? = null
+    var adapter: OrderAdapter? = null
     lateinit var customerDetails: FirestoreCustomerDetails
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +53,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCustomerDetailsBinding.inflate(
+        _binding = FragmentOrderDetailsBinding.inflate(
             inflater,
             container,
             false
@@ -61,13 +61,6 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
         firebaseViewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)
-
-        /* val navHostFragment =
-             activity?.supportFragmentManager?.findFragmentById(R.id.customerDetailsFragment)
-         navController = navHostFragment!!.findNavController()
- */
-        /* val safeArgs: CustomerDetailFragmentArgs by navArgs()
-         val detailsCustomer = safeArgs.customerDetails*/
 
         navController = findNavController()
 
@@ -79,77 +72,28 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
         viewModel = CustomerRegisterViewModel(customerDetails)
 
         customerId = viewModel.customerId.toString()
-        // Log.d(TAG, "Customer Id" + customerId.toString())
-
-        //binding.mtvNoProductFound.visibility = View.GONE
-
         preferences = context?.getSharedPreferences("saveSpanCount", MODE_PRIVATE)
         editor = preferences!!.edit()
         cardViews = ArrayList()
 
         setHasOptionsMenu(true)
 
-        adapter = context?.let {
-            Product1Adapter(this,
-                it,
-                ArrayList<ProductDetails>(),
-                firebaseViewModel,
-                navController,
-                customerDetails)
-        }
+        adapter = context?.let { OrderAdapter(this, it, ArrayList<OrderDetails>()) }
 
-        /*(activity as AppCompatActivity?)!!.setSupportActionBar(binding.toolbar)*/
-
-
-
-
-        firebaseViewModel.loadProductDetailsFromCategory(customerId)
-        binding.recyclerViewProduct.adapter = adapter
+        firebaseViewModel.loadOrderDetailsOfCustomer(customerId)
+        binding.recyclerViewOrder.adapter = adapter
 
         if (spanCount == 2) {
-            loadProductList(firebaseViewModel)
-            binding.recyclerViewProduct.setLayoutManager(StaggeredGridLayoutManager(spanCount,
+            loadOrderList(firebaseViewModel)
+            binding.recyclerViewOrder.setLayoutManager(StaggeredGridLayoutManager(spanCount,
                 StaggeredGridLayoutManager.VERTICAL))
             adapter?.notifyDataSetChanged()
         } else {
-            loadProductList(firebaseViewModel)
-            binding.recyclerViewProduct.setLayoutManager(LinearLayoutManager(context))
-            binding.recyclerViewProduct.adapter = adapter
+            loadOrderList(firebaseViewModel)
+            binding.recyclerViewOrder.setLayoutManager(LinearLayoutManager(context))
+            binding.recyclerViewOrder.adapter = adapter
             adapter?.notifyDataSetChanged()
         }
-
-
-        val customerDetails = FirestoreCustomerDetails(viewModel.customerId,
-            viewModel.customerName,
-            viewModel.customerAddress,
-            viewModel.customerVillage,
-            viewModel.customerDistrict,
-            viewModel.customerLocation,
-            viewModel.customerMobile)
-
-        binding.fabAddProduct.setOnClickListener {
-/*
-            val insertFragment = ProductInsertFragment()
-            val b = Bundle()
-            val CUSTOMER_DETAILS = "CustomerDetailsArgs"
-            b.putParcelable(CUSTOMER_DETAILS,customerDetails)
-            insertFragment.arguments=b
-
-            val fragmentManager: FragmentManager? = fragmentManager
-            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-            fragmentTransaction.replace(R.id.productInsertFragment, insertFragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
-
-*/
-
-
-            val action =
-                CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductInsertFragment(
-                    customerDetails)
-            findNavController().navigate(action)
-        }
-
 
         return binding.root
     }
@@ -168,13 +112,13 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
                 spanCount = preferences!!.getInt("spanCount", 1)
                 if (spanCount == 2) {
                     item.setIcon(R.drawable.ic_list)
-                    binding.recyclerViewProduct.setLayoutManager(StaggeredGridLayoutManager(
+                    binding.recyclerViewOrder.setLayoutManager(StaggeredGridLayoutManager(
                         spanCount,
                         StaggeredGridLayoutManager.VERTICAL))
                     adapter?.notifyDataSetChanged()
                 } else {
-                    binding.recyclerViewProduct.setLayoutManager(LinearLayoutManager(context))
-                    binding.recyclerViewProduct.adapter = adapter
+                    binding.recyclerViewOrder.setLayoutManager(LinearLayoutManager(context))
+                    binding.recyclerViewOrder.adapter = adapter
                     adapter?.notifyDataSetChanged()
                 }
                 if (Objects.equals(item.icon.constantState,
@@ -183,19 +127,19 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
                 ) {
                     spanCount = 2
                     item.setIcon(R.drawable.ic_list)
-                    binding.recyclerViewProduct.setLayoutManager(StaggeredGridLayoutManager(
+                    binding.recyclerViewOrder.setLayoutManager(StaggeredGridLayoutManager(
                         spanCount,
                         StaggeredGridLayoutManager.VERTICAL))
-                    binding.recyclerViewProduct.adapter = adapter
+                    binding.recyclerViewOrder.adapter = adapter
                     adapter?.notifyDataSetChanged()
                 } else {
                     spanCount = 1
                     item.setIcon(R.drawable.ic_grid)
-                    binding.recyclerViewProduct.setLayoutManager(LinearLayoutManager(context))
-                    binding.recyclerViewProduct.adapter = adapter
+                    binding.recyclerViewOrder.setLayoutManager(LinearLayoutManager(context))
+                    binding.recyclerViewOrder.adapter = adapter
                     adapter?.notifyDataSetChanged()
                 }
-                loadProductList(firebaseViewModel)
+                loadOrderList(firebaseViewModel)
                 editor!!.putInt("spanCount", spanCount)
                 editor!!.apply()
                 adapter?.notifyDataSetChanged()
@@ -210,22 +154,17 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
         super.onResume()
     }
 
-    private fun loadProductList(viewModel: FirebaseViewModel) {
-        viewModel.productList.observe(viewLifecycleOwner, Observer {
+    private fun loadOrderList(viewModel: FirebaseViewModel) {
+        viewModel.orderList.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                // binding.mtvNoProductFound.visibility = View.GONE
-                binding.recyclerViewProduct.visibility = View.VISIBLE
-                binding.recyclerViewProduct.adapter = context?.let { it1 ->
-                    Product1Adapter(this,
-                        it1,
-                        it,
-                        firebaseViewModel,
-                        navController,
-                        customerDetails)
+                binding.mtvNoProductFound.visibility = View.GONE
+                binding.recyclerViewOrder.visibility = View.VISIBLE
+                binding.recyclerViewOrder.adapter = context?.let { it1 ->
+                    OrderAdapter(this, it1, it)
                 }
             } else {
-                //binding.mtvNoProductFound.visibility = View.VISIBLE
-                binding.recyclerViewProduct.visibility = View.GONE
+                binding.mtvNoProductFound.visibility = View.VISIBLE
+                binding.recyclerViewOrder.visibility = View.GONE
             }
         })
         adapter?.notifyDataSetChanged()
@@ -237,13 +176,13 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
     }
 
 
-    override fun onClick(productDetails: ProductDetails) {
+    override fun onClick(orderDetails: OrderDetails) {
 
-        val action =
-            CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductDetailsFragment(
-                productDetails)
-        findNavController().navigate(action)
-        Toast.makeText(context, productDetails.productName, Toast.LENGTH_LONG).show()
+        /* val action =
+             CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductDetailsFragment(
+                 productDetails)
+         findNavController().navigate(action)*/
+        Toast.makeText(context, orderDetails.productName, Toast.LENGTH_LONG).show()
     }
 
 

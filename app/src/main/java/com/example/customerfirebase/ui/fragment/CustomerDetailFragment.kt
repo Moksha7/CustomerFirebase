@@ -95,8 +95,15 @@ class CustomerDetailFragment : Fragment() {
             b.putParcelable(CUSTOMER_DETAILS, customerDetailsArgs)
             customerDetails.arguments = b
 
+
+            var orderDetails = OrderDetailsFragment()
+            var bb: Bundle = Bundle()
+            val ORDER_DETAILS = "CustomerDetailsArgs"
+            bb.putParcelable(ORDER_DETAILS, customerDetailsArgs)
+            orderDetails.arguments = bb
+
             return when (position) {
-                0 -> customerDetails
+                0 -> orderDetails
                 1 -> customerDetails
                 2 -> customerDetails
                 else -> customerDetails

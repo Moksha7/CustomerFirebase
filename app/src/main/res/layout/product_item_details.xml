@@ -98,6 +98,21 @@
             app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
             app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbPurchase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:layout_marginTop="5dp"
+            android:background="#03756A"
+            android:backgroundTint="#03756A"
+            android:padding="3dp"
+            android:text="Purchase"
+            android:textColor="#221D1D"
+            android:textSize="@dimen/textsize_large"
+            app:layout_constraintLeft_toRightOf="@id/image_product"
+            app:layout_constraintTop_toBottomOf="@id/mtvProductPrice" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

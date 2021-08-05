@@ -54,8 +54,8 @@
             android:text="@string/name"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textSize="@dimen/textsize_xlarge"
             android:textColor="#221D1D"
+            android:textSize="@dimen/textsize_xlarge"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,29 +89,14 @@
             android:id="@+id/mtvProductTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="1dp"
             android:background="@color/colorPrimary"
-            android:textColor="#221D1D"
+            android:padding="1dp"
             android:text="@string/total"
+            android:textColor="#221D1D"
             android:textSize="@dimen/textsize_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
             app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mbPurchase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="#03756A"
-            android:backgroundTint="#03756A"
-            android:padding="3dp"
-            android:text="Purchase"
-            android:textColor="#221D1D"
-            android:textSize="@dimen/textsize_large"
-            app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
-            app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
-            app:layout_constraintTop_toBottomOf="@id/mtvProductPrice" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

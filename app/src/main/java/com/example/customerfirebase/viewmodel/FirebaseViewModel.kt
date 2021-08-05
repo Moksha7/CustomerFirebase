@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.customerfirebase.db.DbRepository
 import com.example.customerfirebase.model.*
+import com.example.customerfirebase.ui.fragment.CustomerDetailFragmentDirections
 import com.example.customerfirebase.ui.fragment.CustomerRegistrationFragmentDirections
 import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
 import com.example.customerfirebase.ui.fragment.ProductInsertFragmentDirections
@@ -23,6 +24,7 @@ import javax.inject.Inject
 var maxid = 0
 var pid = 0
 var rid = 0
+var oid = 0
 @HiltViewModel
 class FirebaseViewModel @Inject
 constructor(
@@ -34,9 +36,9 @@ constructor(
     val TAG = "LoginFragment"
     var productList = MutableLiveData<ArrayList<ProductDetails>>()
 
-
     var customerList = MutableLiveData<ArrayList<FirestoreCustomerDetails>>()
 
+    var orderList = MutableLiveData<ArrayList<OrderDetails>>()
 
 
     fun insertCustDataIntoRoomDB(id: String, name: String, pass: String) {
@@ -297,8 +299,120 @@ constructor(
         }
 
         Log.d(TAG, "product List : " + productList.value)
+    }
 
 
+    fun loadOrderDetailsOfCustomer(customerId: String) {
+        val newOrderList = arrayListOf<OrderDetails>()
+        val orderRef = firebaseFireStore.collection("ORDER")
+        orderRef.get().addOnSuccessListener { documents ->
+            if (documents != null) {
+                Log.d(TAG, "Document Product Snapshot Data: ")
+                for (document in documents) {
+                    Log.d(TAG, "${document.id} => ${document.data}")
+                    if (customerId == document.getString(
+                            "customerId")
+                    ) {
+                        val order = document.toObject(OrderDetails::class.java)
+                        newOrderList.add(order)
+                        orderList.value = newOrderList
+                    }
+                }
+            }
+            Log.d(TAG, "Order Details Document Snapshot")
+
+        }.addOnFailureListener { exception ->
+            Log.d(TAG, "get failed with", exception)
+        }
+
+        Log.d(TAG, "order List : " + orderList.value)
+    }
+
+
+    fun addOrderDetailsWithId(
+        productId: String,
+        productImage: String,
+        productName: String,
+        productCategory: String,
+        productQuantity: String,
+        productPrice: String,
+        productTotal: String,
+        customerId: String,
+        productInsertDate: String,
+        productDeliveredDate: String,
+        productOrderDate: String,
+        navController: NavController,
+        customerDetails: FirestoreCustomerDetails,
+    ) {
+
+        firebaseFireStore.collection("ORDER")
+            .orderBy("orderId", Query.Direction.DESCENDING).limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val id = document.id
+                    oid += id.toInt()
+                    addOrderDetails(oid + 1,
+                        productId,
+                        productImage,
+                        productName,
+                        productCategory,
+                        productQuantity,
+                        productPrice,
+                        productTotal,
+                        customerId,
+                        productInsertDate,
+                        productDeliveredDate,
+                        productOrderDate,
+                        navController,
+                        customerDetails)
+                }
+            }
+        //addProductDetails(1000 ,name, category, quantity, price, total, customerId, customerDetails, navController)
+
+    }
+
+
+    fun addOrderDetails(
+        orderId: Int,
+        productId: String,
+        productImage: String,
+        productName: String,
+        productCategory: String,
+        productQuantity: String,
+        productPrice: String,
+        productTotal: String,
+        customerId: String,
+        productInsertDate: String,
+        productDeliveredDate: String,
+        productOrderDate: String,
+        navController: NavController,
+        customerDetails: FirestoreCustomerDetails,
+    ) {
+        val orderDetails = Order(orderId,
+            productId,
+            productCategory,
+            productName,
+            productQuantity,
+            productPrice,
+            productTotal,
+            customerId,
+            productInsertDate,
+            productDeliveredDate,
+            productImage,
+            productOrderDate)
+        firebaseFireStore.collection("ORDER").document(orderId.toString())
+            .set(orderDetails)
+            .addOnCompleteListener {
+                Log.d(TAG,
+                    "DocumentSnapshot Product Details successfully written!")
+                loadProductDetails(pid.toString(), customerDetails, navController)
+            }
+            .addOnFailureListener { e ->
+                Log.d(TAG,
+                    "Error writing ProductDetails document",
+                    e)
+            }
     }
 
 
@@ -313,7 +427,6 @@ constructor(
         dateTime: String,
         navController: NavController,
     ) {
-
         firebaseFireStore.collection(PRODUCT)
             .orderBy("productId", Query.Direction.DESCENDING).limit(1)
             .get()
@@ -359,12 +472,12 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Product Details successfully written!")
-                loadProductDetails(pid.toString(), customerDetails, navController)
-                /* val action =
-                     ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
-                         customerDetails
-                     )
-                 navController.navigate(action)*/
+                // loadProductDetails(pid.toString(), customerDetails, navController)
+                val action =
+                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
+                        customerDetails
+                    )
+                navController.navigate(action)
             }
             .addOnFailureListener { e ->
                 Log.d(TAG,
@@ -453,11 +566,9 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Remainder Details successfully written!")
-                val action =
-                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailFragment(
-                        customerDetails
-                    )
-                navController.navigate(action)
+
+                navController.navigate(CustomerDetailFragmentDirections.actionCustomerDetailFragmentSelf(
+                    customerDetails))
             }
             .addOnFailureListener { e ->
                 Log.d(TAG,
