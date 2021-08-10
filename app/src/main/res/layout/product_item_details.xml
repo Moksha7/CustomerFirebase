@@ -6,9 +6,9 @@
     android:id="@+id/card_view_customer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="8dp"
     android:background="@color/colorPrimary"
-    android:padding="3dp">
+    android:padding="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_customer_item1"
@@ -32,6 +32,7 @@
             android:textColorHighlight="@color/colorPrimary"
             android:textSize="@dimen/textsize_medium"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
             app:layout_constraintLeft_toRightOf="@id/image_product"
             app:layout_constraintTop_toTopOf="@id/constraint_customer_item1" />
@@ -39,7 +40,7 @@
         <ImageView
             android:id="@+id/image_product"
             android:layout_width="160dp"
-            android:layout_height="105dp"
+            android:layout_height="155dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
@@ -81,6 +82,7 @@
             android:layout_marginStart="5dp"
             android:text="@string/price"
             android:textColor="#221D1D"
+            android:layout_marginTop="2dp"
             android:textSize="@dimen/textsize_medium"
             app:layout_constraintLeft_toRightOf="@id/image_product"
             app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
@@ -89,10 +91,10 @@
             android:id="@+id/mtvProductTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:text="@string/total"
-            android:textColor="#221D1D"
+            android:layout_marginTop="2dp"
             android:padding="3dp"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/textsize_medium"
             app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
             app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
@@ -100,17 +102,19 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mbPurchase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="72dp"
-            android:layout_marginTop="5dp"
-            android:background="#03756A"
-            android:backgroundTint="#03756A"
-            android:padding="3dp"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_rounded_lightblue_filled_noborder"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
             android:text="Purchase"
-            android:textColor="#221D1D"
             android:textSize="@dimen/textsize_large"
-            app:layout_constraintLeft_toRightOf="@id/image_product"
+            app:layout_constraintStart_toEndOf="@+id/image_product"
             app:layout_constraintTop_toBottomOf="@id/mtvProductPrice" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

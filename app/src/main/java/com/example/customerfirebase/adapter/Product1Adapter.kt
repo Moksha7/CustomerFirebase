@@ -1,14 +1,11 @@
 package com.example.customerfirebase.adapter
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +22,6 @@ import com.example.customerfirebase.model.ProductDetails
 import com.example.customerfirebase.utils.InputFilterMinMax
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -70,10 +66,12 @@ class Product1Adapter(
             }
 
             mbOrder.setOnClickListener {
+                var clickCount = 0
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     val recyclerViewModel = list[position]
                     var b = false
+                    var alert = false
                     val builder = AlertDialog.Builder(it.context)
                     val view = LayoutInflater.from(context).inflate(R.layout.dialog_order, null)
                     val mtvProductName: MaterialTextView =
@@ -89,9 +87,11 @@ class Product1Adapter(
                     val mtvProductTotall: MaterialTextView =
                         view.findViewById(R.id.mtvProductTotall)
                     val imageProduct: ImageView = view.findViewById(R.id.image_product)
+                    val imagePlus: ImageView = view.findViewById(R.id.ivPlus)
+                    val imageMinus: ImageView = view.findViewById(R.id.ivMinus)
                     val cardProduct: CardView = view.findViewById(R.id.card_view_customer)
                     val mbOrder: MaterialButton = view.findViewById(R.id.mbPurchase)
-                    val metQuantity: TextInputEditText = view.findViewById(R.id.metQuantity)
+                    val metQuantity: MaterialTextView = view.findViewById(R.id.metQuantity)
                     metQuantity.filters =
                         arrayOf(InputFilterMinMax(1, recyclerViewModel.productQuantity.toInt()))
 
@@ -101,9 +101,65 @@ class Product1Adapter(
                     mtvProductName.text = recyclerViewModel.productName
                     Glide.with(context).load(list[position].productImageUrl).into(imageProduct)
 
+                    imagePlus.setOnClickListener {
+                        clickCount = clickCount + 1
+                        metQuantity.text = clickCount.toString()
+
+                        val quantity = clickCount.toString().toInt()
+                        val price = recyclerViewModel.productPrice.toInt()
+                        val total = quantity * price
+
+                        mtvProductPricee.text = recyclerViewModel.productPrice
+                        mtvProductTotall.text = total.toString()
+
+                        if (clickCount.toString().equals(recyclerViewModel.productQuantity)) {
+                            b = true
+                            metQuantity.visibility = View.VISIBLE
+                            imagePlus.isClickable = false
+                            imagePlus.isFocusable = false
+                            mtvProductTotall.visibility = View.VISIBLE
+                        } else {
+                            b = true
+                            metQuantity.visibility = View.VISIBLE
+                            imageMinus.isClickable = true
+                            imageMinus.isFocusable = true
+                            mtvProductTotall.visibility = View.VISIBLE
+                        }
+                    }
+
+                    imageMinus.setOnClickListener {
+                        clickCount = clickCount - 1
+                        val quantity = clickCount.toString().toInt()
+                        val price = recyclerViewModel.productPrice.toInt()
+                        val total = quantity * price
+
+                        mtvProductPricee.text = recyclerViewModel.productPrice
+                        mtvProductTotall.text = total.toString()
+
+                        if (clickCount.toString().equals("0")) {
+                            clickCount = 0
+                            metQuantity.visibility = View.GONE
+                            imageMinus.isClickable = false
+                            imageMinus.isFocusable = false
+                            mtvProductTotall.visibility = View.GONE
+                        } else if (clickCount < 0) {
+                            clickCount = 0
+                            metQuantity.visibility = View.GONE
+                            imageMinus.isClickable = false
+                            imageMinus.isFocusable = false
+                            mtvProductTotall.visibility = View.GONE
+                        } else {
+                            b = true
+                            metQuantity.visibility = View.VISIBLE
+                            metQuantity.text = clickCount.toString()
+                            imagePlus.isClickable = true
+                            imagePlus.isFocusable = true
+                            mtvProductTotall.visibility = View.VISIBLE
+                        }
+                    }/*
                     metQuantity.addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(s: Editable?) {
-                            metQuantity.visibility = View.GONE
+
                         }
 
                         override fun beforeTextChanged(
@@ -124,18 +180,31 @@ class Product1Adapter(
                             val quantity = s.toString().toInt()
                             val price = recyclerViewModel.productPrice.toInt()
                             val total = quantity * price
-                            mtvProductQuantity.text = "Quantity : " + s.toString()
+                            metQuantity.text = s.toString()
                             mtvProductPricee.text = recyclerViewModel.productPrice
                             mtvProductTotall.text = total.toString()
                         }
                     })
 
+*/
 
                     mbOrder.setOnClickListener {
-                        if (metQuantity.text.toString().length.equals(0)) {
+                        if (metQuantity.text.toString().length.equals(0) && metQuantity.text.trim()
+                                .toString() == "0"
+                        ) {
                             b = false
-                            return@setOnClickListener
+                        } else if (metQuantity.text.toString()
+                                .toInt() > 0 && metQuantity.text.toString()
+                                .toInt() <= recyclerViewModel.productQuantity.toInt()
+                        ) {
+                            b = true
+                        } else if (metQuantity.text.toString() == "" && metQuantity.text.toString() == " ") {
+                            b = false
                         } else {
+                            b = false
+                        }
+
+                        if (b) {
                             val productId = recyclerViewModel.productId.toString()
                             val productImage = recyclerViewModel.productImageUrl.toString()
                             val productCategory = recyclerViewModel.productCategory
@@ -164,10 +233,11 @@ class Product1Adapter(
                                 productOrderDate,
                                 navController,
                                 customerDetails)
-                            b = true
+
+                            alert = true
                         }
 
-                        if (b) {
+                        if (alert) {
                             alertDialog.dismiss()
                         }
 

@@ -5,10 +5,12 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import androidx.core.content.ContextCompat
 import com.example.customerfirebase.db.CustomerDao
+import com.example.customerfirebase.receiver.AlarmReceiver
 import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -33,7 +35,8 @@ class CustomerApplication : Application() {
         appContext = this
         customerDaoo = customerDao
         FirebaseApp.initializeApp(this)
-
+        AlarmReceiver.updateAlarmWhenReboot(instance,
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
         createNotificationChannel(getString(R.string.reminder_notification_channel_id),
             getString(R.string.reminder_notification_channel_name),
             getString(R.string.reminder_notification_channel_description))

@@ -239,9 +239,12 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
     override fun onClick(productDetails: ProductDetails) {
 
-        val action =
-            CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductDetailsFragment(
-                productDetails)
+        /* val action =
+             CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductDetailsFragment(
+                 productDetails)*/
+        val action = CustomerDetailFragmentDirections.actionCustomerDetailFragmentToOrderFragment(
+            productDetails,
+            customerDetails)
         findNavController().navigate(action)
         Toast.makeText(context, productDetails.productName, Toast.LENGTH_LONG).show()
     }

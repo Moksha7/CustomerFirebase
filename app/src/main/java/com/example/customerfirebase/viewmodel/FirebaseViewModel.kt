@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.customerfirebase.db.DbRepository
 import com.example.customerfirebase.model.*
-import com.example.customerfirebase.ui.fragment.CustomerDetailFragmentDirections
 import com.example.customerfirebase.ui.fragment.CustomerRegistrationFragmentDirections
 import com.example.customerfirebase.ui.fragment.LoginFragmentDirections
+import com.example.customerfirebase.ui.fragment.OrderFragmentDirections
 import com.example.customerfirebase.ui.fragment.ProductInsertFragmentDirections
 import com.example.customerfirebase.utils.AlarmUtil
 import com.example.customerfirebase.utils.Constant.CUSTOMER_DETAILS_REF
@@ -511,7 +511,7 @@ constructor(
                     "DocumentSnapshot Product Details successfully written!")
                 // loadProductDetails(pid.toString(), customerDetails, navController)
                 val action =
-                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailsFragment(
+                    ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailFragment(
                         customerDetails
                     )
                 navController.navigate(action)
@@ -590,7 +590,7 @@ constructor(
     ) {
         val calendar = Calendar.getInstance()
         System.out.println("Original = " + calendar.time)
-        calendar.add(Calendar.SECOND, 20)
+        calendar.add(Calendar.MINUTE, 2)
         System.out.println("Updated  = " + calendar.time)
 
         val currentDate: String =
@@ -627,7 +627,7 @@ constructor(
                 Log.d(TAG,
                     "DocumentSnapshot Remainder Details successfully written!")
                 getLatestRemainderIntoFireStore()
-                navController.navigate(CustomerDetailFragmentDirections.actionCustomerDetailFragmentSelf(
+                navController.navigate(OrderFragmentDirections.actionOrderFragmentToCustomerDetailFragment(
                     customerDetails))
             }
             .addOnFailureListener { e ->

@@ -72,7 +72,15 @@ class AlarmUtil {
                         getRepeatTime(reminder.remainderRepeatValue, reminder.remainderRepeatUnit),
                         alarmPendingIntent
                     )
+                } else {
+                    alarmManager.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        getTriggerTime(reminder.remainderDate, reminder.remainderTime),
+                        getRepeatTime(reminder.remainderRepeatValue, reminder.remainderRepeatUnit),
+                        alarmPendingIntent
+                    )
                 }
+
             } else {
                 if (System.currentTimeMillis() < getTriggerTime(reminder.remainderDate,
                         reminder.remainderTime)
@@ -83,9 +91,16 @@ class AlarmUtil {
                         getTriggerTime(reminder.remainderDate, reminder.remainderTime),
                         alarmPendingIntent
                     )
+                } else {
+                    AlarmManagerCompat.setExactAndAllowWhileIdle(
+                        alarmManager,
+                        AlarmManager.RTC_WAKEUP,
+                        getTriggerTime(reminder.remainderDate, reminder.remainderTime),
+                        alarmPendingIntent
+                    )
                 }
             }
-            updateAlarmWhenReboot(context, PackageManager.COMPONENT_ENABLED_STATE_ENABLED)
+            // updateAlarmWhenReboot(context, PackageManager.COMPONENT_ENABLED_STATE_ENABLED)
         }
 
 
@@ -100,7 +115,7 @@ class AlarmUtil {
             )
             Log.d(TAG, "cancelAlarm: ")
             alarmManager.cancel(alarmPendingIntent)
-            updateAlarmWhenReboot(context, PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
+            // updateAlarmWhenReboot(context, PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
         }
 
 

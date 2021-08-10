@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
 
     <application
         android:name=".CustomerApplication"
@@ -35,21 +37,39 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCinnlDtByCEti3N2wKHKIJpvkm4b57J-4" />
 
-        <receiver
-            android:name=".receiver.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true" />
+        <!--  <receiver
+              android:name=".receiver.AlarmReceiver"
+              android:enabled="true"
+              android:exported="true" />
+
+          <receiver
+              android:name=".receiver.BootReceiver"
+              android:enabled="true"
+              android:exported="true">
+              <intent-filter>
+                  <action android:name="android.intent.action.BOOT_COMPLETED" />
+                  <category android:name="android.intent.category.DEFAULT" />
+              </intent-filter>
+          </receiver>
+  -->
 
         <receiver
-            android:name=".receiver.BootReceiver"
-            android:enabled="false"
-            android:exported="false">
+            android:name=".receiver.AlarmReceiver"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
+
+        <receiver android:name=".receiver.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.AlarmService" />
+        <service android:name=".service.RescheduleAlarmsService" />
     </application>
 
 </manifest>

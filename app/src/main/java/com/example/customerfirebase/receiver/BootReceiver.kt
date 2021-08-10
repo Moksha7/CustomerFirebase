@@ -15,12 +15,10 @@ class BootReceiver : BroadcastReceiver() {
     private var reminders: List<RemainderDetails>? = null
 
     companion object {
-        private const val TAG = "BootReceiver"
+        const val TAG = "BootReceiver"
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        //@ this stage all reminders are cancelled
-        //we need to create alarms for each reminder that was active
         intent?.let {
             Log.d(TAG, "onReceive: intent not null ")
             if (intent.action == "android.intent.action.BOOT_COMPLETED") {
@@ -45,7 +43,7 @@ class BootReceiver : BroadcastReceiver() {
     }
 
     private fun getReminderList(): List<RemainderDetails> {
-        var remainderList = MutableLiveData<ArrayList<RemainderDetails>>()
+        val remainderList = MutableLiveData<ArrayList<RemainderDetails>>()
         val newRemainderList = arrayListOf<RemainderDetails>()
         val remainderRef = FirebaseFirestore.getInstance().collection(Constant.REMAINDER)
         remainderRef.get().addOnSuccessListener { documents ->

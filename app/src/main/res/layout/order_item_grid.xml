@@ -46,6 +46,7 @@
             app:layout_constraintTop_toBottomOf="@id/mtvProductOrderDate"
             tools:srcCompat="@tools:sample/avatars" />
 
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/mtvProductName"
             android:layout_width="match_parent"
@@ -89,10 +90,9 @@
             android:id="@+id/mtvProductTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:padding="1dp"
             android:text="@string/total"
-            android:textColor="#221D1D"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/textsize_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"

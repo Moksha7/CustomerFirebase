@@ -14,7 +14,6 @@
             android:id="@+id/constraint_remainder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:background="@drawable/background_lightgrey_transparent"
             android:orientation="vertical">
 
