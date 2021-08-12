@@ -1,6 +1,5 @@
 package com.example.customerfirebase.adapter
 
-import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -19,13 +18,8 @@ import com.bumptech.glide.Glide
 import com.example.customerfirebase.R
 import com.example.customerfirebase.model.FirestoreCustomerDetails
 import com.example.customerfirebase.model.ProductDetails
-import com.example.customerfirebase.utils.InputFilterMinMax
 import com.example.customerfirebase.viewmodel.FirebaseViewModel
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
 
 class Product1Adapter(
@@ -54,7 +48,7 @@ class Product1Adapter(
             itemView.findViewById(R.id.mtvProductOrderDate)
         var imageProduct: ImageView = itemView.findViewById(R.id.image_product)
         var cardProduct: CardView = itemView.findViewById(R.id.card_view_customer)
-        var mbOrder: MaterialButton = itemView.findViewById(R.id.mbPurchase)
+        /*var mbOrder: MaterialButton = itemView.findViewById(R.id.mbPurchase)*/
 
         init {
             cardProduct.setOnClickListener {
@@ -65,7 +59,7 @@ class Product1Adapter(
                 }
             }
 
-            mbOrder.setOnClickListener {
+            /*mbOrder.setOnClickListener {
                 var clickCount = 0
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -156,7 +150,7 @@ class Product1Adapter(
                             imagePlus.isFocusable = true
                             mtvProductTotall.visibility = View.VISIBLE
                         }
-                    }/*
+                    }*//*
                     metQuantity.addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(s: Editable?) {
 
@@ -186,7 +180,7 @@ class Product1Adapter(
                         }
                     })
 
-*/
+*//*
 
                     mbOrder.setOnClickListener {
                         if (metQuantity.text.toString().length.equals(0) && metQuantity.text.trim()
@@ -245,7 +239,7 @@ class Product1Adapter(
 
                     alertDialog.show()
                 }
-            }
+            }*/
         }
 
         @RequiresApi(Build.VERSION_CODES.O)

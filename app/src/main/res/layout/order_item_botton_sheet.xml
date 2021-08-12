@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraint_order_bottom_shit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_bottomsheet">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbArrowDown"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/arrow_down"
+            android:gravity="center_horizontal" />
+    </FrameLayout>
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvProductQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:text="@string/quantity"
+        android:textAlignment="center"
+        android:textColor="#221D1D"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_bottom_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/background_quantity"
+        app:layout_constraintLeft_toRightOf="@id/mtvProductQuantity"
+        app:layout_constraintTop_toBottomOf="@id/frameLayout">
+
+
+        <ImageView
+            android:id="@+id/ivPlus"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:padding="15dp"
+            android:src="@mipmap/add"
+            app:layout_constraintStart_toStartOf="@+id/constraint_bottom_quantity"
+            app:layout_constraintTop_toTopOf="@+id/constraint_bottom_quantity" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/metQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:inputType="number"
+            android:padding="5dp"
+            android:text="0"
+            android:textColor="#221D1D"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/ivMinus"
+            app:layout_constraintStart_toEndOf="@+id/ivPlus"
+            app:layout_constraintTop_toTopOf="@+id/constraint_bottom_quantity" />
+
+
+        <ImageView
+            android:id="@+id/ivMinus"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:padding="15dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/subt"
+            app:layout_constraintEnd_toEndOf="@id/constraint_bottom_quantity"
+            app:layout_constraintStart_toEndOf="@id/metQuantity"
+            app:layout_constraintTop_toTopOf="@+id/constraint_bottom_quantity" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="10dp"
+        android:background="#c0c0c0"
+        app:layout_constraintTop_toBottomOf="@+id/constraint_bottom_quantity" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvProductPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:text="@string/price"
+        android:textColor="#221D1D"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/constraint_bottom_quantity" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvProductPricee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"
+        android:textColor="#221D1D"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
+        app:layout_constraintTop_toBottomOf="@id/constraint_bottom_quantity" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvProductTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:text="@string/total"
+        android:textColor="#221D1D"
+        android:textSize="16sp"
+        app:layout_constraintRight_toLeftOf="@+id/mtvProductTotall"
+        app:layout_constraintTop_toBottomOf="@id/constraint_bottom_quantity" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mtvProductTotall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/mtvProductTotal"
+        app:layout_constraintTop_toBottomOf="@id/constraint_bottom_quantity" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

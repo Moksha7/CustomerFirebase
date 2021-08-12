@@ -40,7 +40,7 @@
         <ImageView
             android:id="@+id/image_product"
             android:layout_width="160dp"
-            android:layout_height="155dp"
+            android:layout_height="105dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
@@ -100,22 +100,6 @@
             app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
             app:layout_constraintTop_toBottomOf="@id/mtvProductQuantity" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mbPurchase"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/shape_rounded_lightblue_filled_noborder"
-            android:paddingTop="1dp"
-            android:paddingBottom="1dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@id/constraint_customer_item1"
-            android:text="Purchase"
-            android:textSize="@dimen/textsize_large"
-            app:layout_constraintStart_toEndOf="@+id/image_product"
-            app:layout_constraintTop_toBottomOf="@id/mtvProductPrice" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -10,310 +10,212 @@
 
     </data>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/background_lightgrey_transparent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_customer_item1"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:background="@drawable/background_lightgrey_transparent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_constraintBottom_toTopOf="@+id/mbPurchase"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ViewFlipper
-                android:id="@+id/view_flipper"
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@+id/constraint_customer_item1"
-                app:layout_constraintStart_toStartOf="@+id/constraint_customer_item1"
-                app:layout_constraintTop_toTopOf="@+id/constraint_customer_item1">
+                android:fitsSystemWindows="true"
+                android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar">
 
-                <!--  The child Views/Layout to flip -->
-
-                <!--  Layout 1 for 1st Screen -->
-                <LinearLayout
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/collapsing_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    app:contentScrim="?attr/colorPrimary"
+                    app:expandedTitleMarginEnd="64dp"
+                    app:expandedTitleMarginStart="48dp"
+                    app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+                    app:popupTheme="@style/Theme.MaterialComponents.DayNight">
 
-
-                    <ImageView
-                        android:id="@+id/imageView1"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraint_collapsing_order"
                         android:layout_width="match_parent"
-                        android:layout_height="440dp"
-                        android:scaleType="fitXY" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_lightgrey_transparent"
+                        android:padding="2dp">
 
-                </LinearLayout>
-
-                <!--  Layout 2 for 2nd Screen -->
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="match_parent"
-                        android:layout_height="440dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/laptop1" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="440dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/laptop2" />
-                </LinearLayout>
-
-
-            </ViewFlipper>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/mtvProductName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:padding="5dp"
+                            android:text="@string/name"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="#221D1D"
+                            android:textSize="@dimen/textsize_xlarge"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/constraint_collapsing_order"
+                            app:layout_constraintStart_toStartOf="@+id/constraint_collapsing_order"
+                            app:layout_constraintTop_toTopOf="@+id/constraint_collapsing_order" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraint_order_rb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@+id/constraint_customer_item1"
-                app:layout_constraintStart_toStartOf="@+id/constraint_customer_item1"
-                app:layout_constraintTop_toBottomOf="@+id/view_flipper">
+                android:id="@+id/constraint_customer_item1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background_lightgrey_transparent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <RadioGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checkedButton="@+id/rbNo"
-                    android:orientation="horizontal"
-                    app:layout_constraintStart_toStartOf="@id/constraint_order_rb"
-                    app:layout_constraintTop_toTopOf="@+id/constraint_order_rb">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_product_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintEnd_toEndOf="@+id/constraint_customer_item1"
+                    app:layout_constraintStart_toStartOf="@+id/constraint_customer_item1"
+                    app:layout_constraintTop_toTopOf="@+id/constraint_customer_item1">
 
-                    <RadioButton
-                        android:id="@+id/radioButton"
+                    <ViewFlipper
+                        android:id="@+id/view_flipper"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintEnd_toEndOf="@+id/constraint_product_image"
+                        app:layout_constraintStart_toStartOf="@+id/constraint_product_image"
+                        app:layout_constraintTop_toTopOf="@+id/constraint_product_image">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:id="@+id/linear1"
+                            android:layout_height="fill_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView1"
+                                android:layout_width="match_parent"
+                                android:layout_height="fill_parent"
+                                android:scaleType="fitXY" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:id="@+id/linear2"
+                            android:layout_height="fill_parent">
+
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="match_parent"
+                                android:layout_height="fill_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/laptop2" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:id="@+id/linear3"
+                            android:layout_height="fill_parent">
+
+                            <ImageView
+                                android:id="@+id/imageView3"
+                                android:layout_width="match_parent"
+                                android:layout_height="fill_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/laptop3" />
+                        </LinearLayout>
+
+                    </ViewFlipper>
+
+                    <RadioGroup
+                        android:id="@+id/radiogroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="40dp"
-                        android:focusable="true" />
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="@+id/constraint_product_image"
+                        app:layout_constraintStart_toStartOf="@id/constraint_product_image"
+                        app:layout_constraintTop_toTopOf="@+id/constraint_product_image">
 
-                    <RadioButton
-                        android:id="@+id/radioButton2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toRightOf="@+id/radioButton"
-                        app:layout_constraintTop_toTopOf="@+id/constraint_order_rb" />
+                        <RadioButton
+                            android:id="@+id/radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:buttonTint="@color/colorPrimary"
+                            android:focusable="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/colorPrimary"
+                            app:layout_constraintLeft_toRightOf="@+id/radioButton"
+                            app:layout_constraintTop_toTopOf="@+id/constraint_order_rb" />
 
 
-                    <RadioButton
-                        android:id="@+id/radioButton3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toRightOf="@+id/radioButton2"
-                        app:layout_constraintTop_toTopOf="@id/constraint_order_rb" />
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/radioButton3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/colorPrimary"
+                            app:layout_constraintLeft_toRightOf="@+id/radioButton2"
+                            app:layout_constraintTop_toTopOf="@id/constraint_order_rb" />
+                    </RadioGroup>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <ImageView
-                android:id="@+id/ivHeart"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginEnd="30dp"
-                app:layout_constraintEnd_toEndOf="@+id/constraint_customer_item1"
-                app:layout_constraintTop_toTopOf="@+id/constraint_customer_item1"
-                app:srcCompat="@drawable/ic_heart"
-                app:tint="@color/colorPrimary" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="2dp"
-                android:background="#c0c0c0"
-                app:layout_constraintTop_toBottomOf="@+id/constraint_order_rb" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvProductQuantity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="15dp"
-                android:padding="5dp"
-                android:text="@string/quantity"
-                android:textAlignment="center"
-                android:textColor="#221D1D"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/constraint_order_rb" />
-
-            <ImageView
-                android:id="@+id/ivPlus"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:src="@mipmap/plus"
-                app:layout_constraintLeft_toRightOf="@id/mtvProductQuantity"
-                app:layout_constraintTop_toBottomOf="@id/constraint_order_rb" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/metQuantity"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
-                android:inputType="number"
-                android:padding="5dp"
-                android:text="0"
-                android:textColor="#221D1D"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toRightOf="@+id/ivPlus"
-                app:layout_constraintTop_toBottomOf="@id/constraint_order_rb" />
-
-
-            <ImageView
-                android:id="@+id/ivMinus"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/minus"
-                app:layout_constraintLeft_toRightOf="@id/metQuantity"
-                app:layout_constraintTop_toBottomOf="@id/constraint_order_rb" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="2dp"
-                android:background="#c0c0c0"
-                app:layout_constraintTop_toBottomOf="@+id/mtvProductQuantity" />
-
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvProductPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:text="@string/price"
-                android:textColor="#221D1D"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivPlus" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvProductPricee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:padding="5dp"
-                android:text=""
-                android:textColor="#221D1D"
-                android:textSize="16sp"
-                app:layout_constraintLeft_toRightOf="@id/mtvProductPrice"
-                app:layout_constraintTop_toBottomOf="@id/ivPlus" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvProductTotal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:padding="5dp"
-                android:text="@string/total"
-                android:textColor="#221D1D"
-                android:textSize="16sp"
-                app:layout_constraintRight_toLeftOf="@+id/mtvProductTotall"
-                app:layout_constraintTop_toBottomOf="@id/ivMinus" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvProductTotall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="30dp"
-                android:padding="5dp"
-                android:text=""
-                android:textColor="@color/colorPrimary"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/mtvProductTotal"
-                app:layout_constraintTop_toBottomOf="@id/ivMinus" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="2dp"
-                android:background="#c0c0c0"
-                app:layout_constraintTop_toBottomOf="@+id/mtvProductTotal" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/mbPurchase"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:background="@drawable/shape_rounded_lightblue_filled_noborder"
-                android:paddingTop="1dp"
-                android:paddingBottom="1dp"
-                android:text="@string/purchase"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textsize_large"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/mbAddToCart"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/mbAddToCart"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:background="@drawable/shape_rounded_lightblue_filled_noborder"
-                android:paddingTop="1dp"
-                android:paddingBottom="1dp"
-                android:text="Add To Cart"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/textsize_large"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/mbPurchase" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/mtvProductName"
+            <include
+                android:id="@+id/bottom_sheet_parent"
+                layout="@layout/order_item_botton_sheet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="5dp"
-                android:text="@string/name"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="#221D1D"
-                android:textSize="@dimen/textsize_xlarge"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/mbPurchase"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mtvProductTotal" />
+                app:layout_anchorGravity="bottom"
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"></include>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_marginTop="2dp"
-                android:background="#c0c0c0"
-                app:layout_constraintTop_toBottomOf="@+id/mtvProductName" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbPurchase"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/margin_small"
+            android:background="@drawable/shape_rounded_lightblue_filled_noborder"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:text="@string/purchase"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textsize_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mbAddToCart"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbAddToCart"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_margin="@dimen/margin_small"
+            android:background="@drawable/shape_rounded_lightblue_filled_noborder"
+            android:paddingTop="1dp"
+            android:paddingBottom="1dp"
+            android:text="Add To Cart"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textsize_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/mbPurchase" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>
