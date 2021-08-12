@@ -100,6 +100,7 @@
                                 android:id="@+id/imageView1"
                                 android:layout_width="match_parent"
                                 android:layout_height="fill_parent"
+                                android:contentDescription="@string/todo"
                                 android:scaleType="fitXY" />
                         </LinearLayout>
 
@@ -114,6 +115,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="fill_parent"
                                 android:scaleType="fitXY"
+                                android:contentDescription="@string/todo"
                                 android:src="@drawable/laptop2" />
                         </LinearLayout>
 
@@ -127,6 +129,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="fill_parent"
                                 android:scaleType="fitXY"
+                                android:contentDescription="@string/todo"
                                 android:src="@drawable/laptop3" />
                         </LinearLayout>
 
@@ -179,7 +182,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_anchorGravity="bottom"
-                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"></include>
+                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -206,7 +209,7 @@
             android:background="@drawable/shape_rounded_lightblue_filled_noborder"
             android:paddingTop="1dp"
             android:paddingBottom="1dp"
-            android:text="Add To Cart"
+            android:text="@string/add_to_cart"
             android:textAlignment="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/textsize_medium"

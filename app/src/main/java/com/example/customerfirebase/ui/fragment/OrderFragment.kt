@@ -156,6 +156,8 @@ class OrderFragment : Fragment() {
                     b = true
                     bottomSheetParent.ivPlus.isClickable = false
                     bottomSheetParent.ivPlus.isFocusable = false
+                    bottomSheetParent.ivMinus.isClickable = true
+                    bottomSheetParent.ivMinus.isFocusable = true
 
                 } else {
                     b = true
@@ -177,13 +179,17 @@ class OrderFragment : Fragment() {
                     clickCount = 0
                     bottomSheetParent.ivMinus.isClickable = false
                     bottomSheetParent.ivMinus.isFocusable = false
+                    bottomSheetParent.ivPlus.isClickable = true
+                    bottomSheetParent.ivPlus.isFocusable = true
                     bottomSheetParent.mtvProductTotall.text = "0"
+                    bottomSheetParent.metQuantity.text = clickCount.toString()
                 } else if (clickCount < 0) {
                     clickCount = 0
                     bottomSheetParent.ivMinus.isClickable = false
                     bottomSheetParent.ivMinus.isFocusable = false
+                    bottomSheetParent.ivPlus.isClickable = true
+                    bottomSheetParent.ivPlus.isFocusable = true
                     bottomSheetParent.mtvProductTotall.text = "0"
-                    bottomSheetParent.metQuantity.text = "0"
                 } else {
                     b = true
                     bottomSheetParent.metQuantity.text = clickCount.toString()

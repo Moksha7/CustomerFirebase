@@ -58,6 +58,10 @@ class ProductInsertFragment : Fragment() {
 
         binding.apply {
             insertProduct = ProductDetailsViewModel(ProductDetails())
+            sCategory.setOnSpinnerItemSelectedListener<String> { index, text ->
+                category = text
+            }
+
 
             btnInsertProduct.setOnClickListener {
                 saveProductInsert(viewModel)
@@ -76,9 +80,7 @@ class ProductInsertFragment : Fragment() {
             val quantity = tietProductQuantity.text.toString()
             val price = tietProductPrice.text.toString()
             val total = tietProductTotal.text.toString()
-            binding.sCategory.setOnSpinnerItemSelectedListener<String> { index, text ->
-                category = text
-            }
+
             val currentDate = LocalDate.now()
             val dateTime =
                 (currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))).toString()

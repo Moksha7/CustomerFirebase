@@ -19,12 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:adjustViewBounds="true"
-                android:padding="5dp"
-                android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
-                app:layout_constraintTop_toTopOf="@id/constraint_customer_item1"
-                tools:srcCompat="@tools:sample/avatars" />
+            android:padding="5dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/constraint_customer_item1"
+            app:layout_constraintTop_toTopOf="@id/constraint_customer_item1"
+            android:contentDescription="@string/todo"
+            tools:srcCompat="@tools:sample/avatars" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/mtvProductName"
@@ -66,6 +67,7 @@
             android:layout_marginBottom="5dp"
             android:src="@mipmap/plus"
             app:layout_constraintLeft_toRightOf="@id/mtvProductQuantity"
+            android:contentDescription="@string/todo"
             app:layout_constraintTop_toBottomOf="@id/mtvProductName" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -76,7 +78,7 @@
             android:inputType="number"
             android:padding="5dp"
             android:layout_marginTop="10dp"
-            android:text="0"
+            android:text="@string/_0"
             android:textColor="#221D1D"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -93,6 +95,7 @@
             android:layout_marginBottom="5dp"
             android:scaleType="fitXY"
             android:src="@mipmap/minus"
+            android:contentDescription="@string/todo"
             app:layout_constraintLeft_toRightOf="@id/metQuantity"
             app:layout_constraintTop_toBottomOf="@id/mtvProductName" />
 

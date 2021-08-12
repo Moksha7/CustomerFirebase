@@ -81,6 +81,7 @@
 
         <ImageView
             android:id="@+id/ivMinus"
+            android:clickable="false"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"

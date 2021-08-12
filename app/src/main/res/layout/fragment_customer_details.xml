@@ -62,6 +62,7 @@
             android:layout_margin="16dp"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/todo"
             android:src="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

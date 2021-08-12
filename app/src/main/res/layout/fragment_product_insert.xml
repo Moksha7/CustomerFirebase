@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/md_blue_200"
                 android:gravity="center"
-                android:hint="Category"
+                android:hint="@string/category"
                 android:padding="10dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white_70"

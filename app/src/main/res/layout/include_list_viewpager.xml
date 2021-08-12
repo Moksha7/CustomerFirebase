@@ -15,7 +15,7 @@
         android:background="@drawable/background_lightgrey_transparent"
         android:theme="@style/AppTheme.NoActionbar">
 
-        <com.google.android.material.appbar.AppBarLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -168,6 +168,7 @@
             android:layout_margin="16dp"
             android:background="@color/colorPrimary"
             android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/todo"
             android:src="@drawable/ic_add" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
