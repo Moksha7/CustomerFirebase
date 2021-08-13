@@ -156,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/quantity"
-                android:inputType="textMultiLine"
+                android:inputType="numberDecimal"
                 android:text="@={insertProduct.productQuantity}"
                 android:textSize="@dimen/textsize_large" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -178,6 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/price"
+                android:inputType="numberDecimal"
                 android:text="@={insertProduct.productPrice}"
                 android:textSize="@dimen/textsize_large" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -200,6 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/total"
+                android:inputType="numberDecimal"
                 android:text="@={insertProduct.productTotal}"
                 android:textSize="@dimen/textsize_large" />
         </com.google.android.material.textfield.TextInputLayout>

@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        NetworkConnectionLiveData(this ?: return)
+        NetworkConnectionLiveData(this)
             .observe(this, Observer { isConnected ->
                 if (!isConnected) {
                     // Internet Not Available
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                         LayoutInflater.from(this).inflate(R.layout.dialog_check_internet, null)
                     builder.setView(view)
 
-                    var buttonRetry: MaterialButton = view.findViewById(R.id.mbRetry)
+                    val buttonRetry: MaterialButton = view.findViewById(R.id.mbRetry)
 
 
                     val dialog = builder.create()
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity() {
                     dialog.window?.setGravity(Gravity.CENTER)
 
                     buttonRetry.setOnClickListener {
-                        NetworkConnectionLiveData(this ?: return@setOnClickListener)
-                            .observe(this, Observer { isConnected ->
+                        NetworkConnectionLiveData(this)
+                            .observe(this, { isConnected ->
                                 if (!isConnected) {
                                     dialog.show()
                                 } else {
@@ -79,7 +79,4 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
 }

@@ -16,7 +16,6 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.navigation.NavController
 import com.example.customerfirebase.R
 import com.example.customerfirebase.ui.MapActivity
 import com.google.android.gms.location.*
@@ -31,7 +30,6 @@ import com.google.android.material.button.MaterialButton
 import java.util.*
 
 class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var navController: NavController
     private val pERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
     lateinit var mMap: GoogleMap
@@ -94,25 +92,17 @@ class LocationActivity : AppCompatActivity(), OnMapReadyCallback {
                         requestNewLocationData()
                     } else {
                         currentLocation = LatLng(location.latitude, location.longitude)
-                        if (location != null) {
-                            val lat = location.latitude
-                            val lon = location.longitude
+                        val lat = location.latitude
+                        val lon = location.longitude
 
-                            val geocoder = Geocoder(this, Locale.getDefault())
-                            val addresses: List<Address>
+                        val geocoder = Geocoder(this, Locale.getDefault())
+                        val addresses: List<Address>
 
-                            addresses = geocoder.getFromLocation(lat, lon, 1)
+                        addresses = geocoder.getFromLocation(lat, lon, 1)
 
-                            val address = addresses[0].getAddressLine(0)
-                            val address2 = addresses[0].getAddressLine(1)
-                            city = addresses[0].locality
-                            val state = addresses[0].adminArea
-                            val country = addresses[0].countryName
-                            val postalCode = addresses[0].postalCode
-                            val knownName = addresses[0].featureName
-                            saveLocation(city)
+                        city = addresses[0].locality
+                        saveLocation(city)
 
-                        }
                         mMap.clear()
                         mMap.addMarker(MarkerOptions().position(currentLocation).title(city)
                             .draggable(true))

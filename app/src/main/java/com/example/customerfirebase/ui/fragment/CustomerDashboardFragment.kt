@@ -25,8 +25,6 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
     private var _binding: FragmentCustomerDashboardBinding? = null
     private val binding get() = _binding!!
 
-    /* private var _collapsebinding:CollapsingToolbarBinding? = null
-     private val collapsingBinding get() = _collapsebinding*/
     private lateinit var navController: NavController
     private lateinit var viewModel: FirebaseViewModel
     var category: String = ""
@@ -63,9 +61,7 @@ class CustomerDashboardFragment : Fragment(), CustomerAdapter.OnClickListener {
         val customerName = safeArgs.customerName
         activity?.setTitle(customerName)
 
-        /* _collapsebinding = CollapsingToolbarBinding.bind(view)
 
-         _collapsebinding!!.toolbar.title = "Welcome"*/
 
         viewModel =
             ViewModelProvider(this).get(FirebaseViewModel::class.java)

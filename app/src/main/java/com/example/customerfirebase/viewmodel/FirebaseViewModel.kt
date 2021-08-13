@@ -4,11 +4,17 @@ import android.app.AlarmManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.example.customerfirebase.R
 import com.example.customerfirebase.db.DbRepository
 import com.example.customerfirebase.model.*
 import com.example.customerfirebase.ui.fragment.CustomerRegistrationFragmentDirections
@@ -39,7 +45,7 @@ constructor(
     private val firebaseFireStore: FirebaseFirestore,
 
 ) : ViewModel() {
-    val TAG = "LoginFragment"
+    val TAG = "loginFragment"
     var productList = MutableLiveData<ArrayList<ProductDetails>>()
 
     var customerList = MutableLiveData<ArrayList<FirestoreCustomerDetails>>()
@@ -100,13 +106,16 @@ constructor(
         customerLocation: String,
         customerMobile: String,
         navController: NavController,
+        it: View,
     ) {
+        val progressDialog = showProgress(it)
+        handleProgress(progressDialog, false)
         firebaseFireStore.collection("customerDetails")
             .orderBy("customerId", Query.Direction.DESCENDING).limit(1)
             .get()
             .addOnSuccessListener { documents ->
                 for (document in documents) {
-                    var id = document.id
+                    val id = document.id
                     maxid += id.toInt()
                     insertCustomerDetailsIntoFireStore(maxid + 1,
                         customerName,
@@ -115,7 +124,8 @@ constructor(
                         customerCity,
                         customerLocation,
                         customerMobile,
-                        navController)
+                        navController,
+                        progressDialog)
                 }
             }
     }
@@ -130,6 +140,7 @@ constructor(
         customerLocation: String,
         customerMobile: String,
         navController: NavController,
+        progressDialog: AlertDialog,
     ) {
         val customerDetail = CustomerDetails(maxid,
             customerName,
@@ -145,9 +156,9 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot CustomerDetails successfully written!")
-
                 val action =
                     CustomerRegistrationFragmentDirections.actionCustomerRegistrationFragmentToCustomerDashboardFragment()
+                handleProgress(progressDialog, true)
                 navController.navigate(action)
                 //saveCustId(maxid.toString())
             }
@@ -196,7 +207,29 @@ constructor(
             }
     }
 
-    fun checkCustIdIntoFireStore(id: String, name: String, pass: String) {
+    fun showProgress(it: View): AlertDialog {
+        val ctx = it.context
+        val builder = ctx.let { AlertDialog.Builder(it) }
+        val view = LayoutInflater.from(ctx).inflate(R.layout.dialog_progressbar, null)
+        builder.setView(view)
+
+        val dialog = builder.create()
+        dialog.setCancelable(false)
+        dialog.window?.setGravity(Gravity.CENTER)
+        return dialog
+    }
+
+    private fun handleProgress(dialog: AlertDialog, progress: Boolean) {
+        if (progress) {
+            dialog.dismiss()
+        } else {
+            dialog.show()
+        }
+    }
+
+    fun checkCustIdIntoFireStore(it: View, id: String, name: String, pass: String) {
+        val progressDialog = showProgress(it)
+        handleProgress(progressDialog, false)
         val custIdRef = firebaseFireStore.collection("customer")
         custIdRef.document(id).get().addOnSuccessListener { document ->
             if (document != null) {
@@ -204,19 +237,35 @@ constructor(
                 val ccid = document.getString("cid")
                 if (ccid == id) {
                     insertCustDataIntoFireStore(id, name, pass)
+                    handleProgress(progressDialog, true)
+                    Toast.makeText(it.context, "User Registered Successfully", Toast.LENGTH_LONG)
+                        .show()
                     Log.d(TAG, "User Valid")
                 } else {
                     Log.d(TAG, "User not Valid")
+                    handleProgress(progressDialog, true)
+                    Toast.makeText(it.context,
+                        "User Id is Not Valid \nUser Not Registered Successfully",
+                        Toast.LENGTH_LONG).show()
                 }
             } else {
+                handleProgress(progressDialog, true)
                 Log.d(TAG, "No such Document Snapshot")
             }
         }.addOnFailureListener { exception ->
+            handleProgress(progressDialog, true)
             Log.d(TAG, "get failed with", exception)
         }
     }
 
-    fun checkLoginDataIntoFireStore(id: String, pass: String, navController: NavController) {
+    fun checkLoginDataIntoFireStore(
+        it: View,
+        id: String,
+        pass: String,
+        navController: NavController,
+    ) {
+        val progressDialog = showProgress(it)
+        handleProgress(progressDialog, false)
         val custLoginRef = firebaseFireStore.collection("customerData")
 
         custLoginRef.document(id).get().addOnSuccessListener { document ->
@@ -227,16 +276,17 @@ constructor(
                 val ccname = document.getString("cname")
                 if (ccid == id && ccpass == pass) {
                     Log.d(TAG, "User Valid")
-                    /* val action =
-                         LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment(
-                             ccname)*/
+
                     val action =
                         LoginFragmentDirections.actionLoginFragmentToCustomerDashboardFragment(
                             ccname)
+                    handleProgress(progressDialog, true)
                     navController.navigate(action)
 
                 } else {
                     Log.d(TAG, "User not Valid")
+                    handleProgress(progressDialog, true)
+                    Toast.makeText(it.context, "User Not Valid", Toast.LENGTH_LONG).show()
                 }
             } else {
                 Log.d(TAG, "No such Document Snapshot")
@@ -289,11 +339,11 @@ constructor(
                         val product = document.toObject(ProductDetails::class.java)
                         newProductList.add(product)
                         productList.value = newProductList
-                        Log.d(TAG, "Product Name : " + productName)
-                        Log.d(TAG, "Product Quantity: " + productQuantity)
-                        Log.d(TAG, "Product Price: " + productPrice)
-                        Log.d(TAG, "Product Total: " + productTotal)
-                        Log.d(TAG, "Product Category: " + productCategory)
+                        Log.d(TAG, "Product Name : $productName")
+                        Log.d(TAG, "Product Quantity: $productQuantity")
+                        Log.d(TAG, "Product Price: $productPrice")
+                        Log.d(TAG, "Product Total: $productTotal")
+                        Log.d(TAG, "Product Category: $productCategory")
                     } else {
 
 
@@ -454,6 +504,7 @@ constructor(
 
 
     fun addProductDetailsWithId(
+        it: View,
         name: String,
         category: String,
         quantity: String,
@@ -464,6 +515,8 @@ constructor(
         dateTime: String,
         navController: NavController,
     ) {
+        val progressDialog = showProgress(it)
+        handleProgress(progressDialog, false)
         firebaseFireStore.collection(PRODUCT)
             .orderBy("productId", Query.Direction.DESCENDING).limit(1)
             .get()
@@ -480,7 +533,8 @@ constructor(
                         customerId,
                         customerDetails,
                         dateTime,
-                        navController)
+                        navController,
+                        progressDialog)
                 }
             }
         //addProductDetails(1000 ,name, category, quantity, price, total, customerId, customerDetails, navController)
@@ -499,6 +553,7 @@ constructor(
         customerDetails: FirestoreCustomerDetails,
         dateTime: String,
         navController: NavController,
+        progressDialog: AlertDialog,
     ) {
         // val productDetails = ProductDetails(pid.toLong(),category,name,quantity,price,total,customerId,"","","")
         val productDetails =
@@ -514,6 +569,7 @@ constructor(
                     ProductInsertFragmentDirections.actionProductInsertFragmentToCustomerDetailFragment(
                         customerDetails
                     )
+                handleProgress(progressDialog, true)
                 navController.navigate(action)
             }
             .addOnFailureListener { e ->
@@ -601,7 +657,7 @@ constructor(
 
         val remainderDetails = Remainder(id,
             orderDetails.orderId.toString(),
-            orderDetails.productId.toString(),
+            orderDetails.productId,
             orderDetails.productCategory,
             orderDetails.productName,
             orderDetails.productQuantity,
@@ -661,29 +717,6 @@ constructor(
             )
         }
         Log.d("FirebaseViewModel", "alarm created")
-    }
-
-
-    fun getRemainderList() {
-        val newRemainderList = arrayListOf<RemainderDetails>()
-        val remainderRef = firebaseFireStore.collection(REMAINDER)
-        remainderRef.get().addOnSuccessListener { documents ->
-            if (documents != null) {
-                Log.d(TAG, "Document Product Snapshot Data: ")
-                for (document in documents) {
-                    Log.d(TAG, "${document.id} => ${document.data}")
-                    val remainder = document.toObject(RemainderDetails::class.java)
-                    newRemainderList.add(remainder)
-                    remainderList.value = newRemainderList
-                }
-            }
-            Log.d(TAG, "Remainder List Document Snapshot")
-
-        }.addOnFailureListener { exception ->
-            Log.d(TAG, "get failed with", exception)
-        }
-
-        Log.d(TAG, "remainder List : " + remainderList.value)
     }
 
 

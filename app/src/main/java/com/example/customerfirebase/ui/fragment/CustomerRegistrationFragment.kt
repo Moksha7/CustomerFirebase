@@ -2,6 +2,7 @@ package com.example.customerfirebase.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,7 @@ class CustomerRegistrationFragment : Fragment() {
     private var _binding: FragmentCustomerRegistrationBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
-
+    private var isAllFieldChecked: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +52,10 @@ class CustomerRegistrationFragment : Fragment() {
             }
 
             btnCustomerRegistration.setOnClickListener {
-                saveCustomerRegistration(viewModel)
+                isAllFieldChecked = checkAllFields()
+                if (isAllFieldChecked) {
+                    saveCustomerRegistration(viewModel, it)
+                }
             }
         }
 
@@ -59,7 +63,7 @@ class CustomerRegistrationFragment : Fragment() {
         return binding.root
     }
 
-    private fun saveCustomerRegistration(viewModel: FirebaseViewModel) {
+    private fun saveCustomerRegistration(viewModel: FirebaseViewModel, it: View) {
         binding.apply {
             val customerName = tietCustomerName.text.toString()
             val customerAddress = tietCustomerAddress.text.toString()
@@ -73,7 +77,7 @@ class CustomerRegistrationFragment : Fragment() {
                 customerVillage,
                 customerCity,
                 customerLocation,
-                customerMobile, navController)
+                customerMobile, navController, it)
         }
 
     }
@@ -108,7 +112,49 @@ class CustomerRegistrationFragment : Fragment() {
         val prefs = context?.getSharedPreferences("CommonPrefs",
             AppCompatActivity.MODE_PRIVATE)
         city = prefs?.getString(location, "").toString()
+    }
 
+    private fun checkAllFields(): Boolean {
+        val strCname: String = binding.tilCustomerName.editText?.text.toString()
+        val strCadd: String = binding.tilCustomerAddress.editText?.text.toString()
+        val strCvill: String = binding.tilCustomerVillage.editText?.text.toString()
+        val strCdist: String = binding.tilCustomerDistrict.editText?.text.toString()
+        val strCloc: String = binding.tilCustomerLocation.editText?.text.toString()
+        val strCmob: String = binding.tilCustomerMobile.editText?.text.toString()
+
+        if (!TextUtils.isEmpty(strCname)) {
+            binding.tilCustomerName.isErrorEnabled = false
+            return true
+        } else if (!TextUtils.isEmpty(strCadd)) {
+            binding.tilCustomerAddress.isErrorEnabled = false
+            return true
+        } else if (!TextUtils.isEmpty(strCvill)) {
+            binding.tilCustomerVillage.isErrorEnabled = false
+            return true
+        } else if (!TextUtils.isEmpty(strCdist)) {
+            binding.tilCustomerDistrict.isErrorEnabled = false
+            return true
+        } else if (!TextUtils.isEmpty(strCloc)) {
+            binding.tilCustomerLocation.isErrorEnabled = false
+            return true
+        } else if (!TextUtils.isEmpty(strCmob)) {
+            binding.tilCustomerMobile.isErrorEnabled = false
+            return true
+        } else {
+            binding.tilCustomerName.error = "Input required"
+            binding.tilCustomerName.isErrorEnabled = true
+            binding.tilCustomerAddress.error = "Input required"
+            binding.tilCustomerAddress.isErrorEnabled = true
+            binding.tilCustomerVillage.error = "Input required"
+            binding.tilCustomerVillage.isErrorEnabled = true
+            binding.tilCustomerDistrict.error = "Input required"
+            binding.tilCustomerDistrict.isErrorEnabled = true
+            binding.tilCustomerLocation.error = "Input required"
+            binding.tilCustomerLocation.isErrorEnabled = true
+            binding.tilCustomerMobile.error = "Input required"
+            binding.tilCustomerMobile.isErrorEnabled = true
+            return false
+        }
     }
 
 }

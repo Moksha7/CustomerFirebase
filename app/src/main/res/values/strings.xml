@@ -8,6 +8,7 @@
         authentication
     </string>
 
+    <string name="field_required">This Field is Required</string>
     <string name="reminder_notification_channel_id" translatable="false">reminder_channel</string>
     <string name="reminder_notification_channel_name" translatable="true">Reminder</string>
     <string name="reminder_notification_channel_description">User reminder</string>

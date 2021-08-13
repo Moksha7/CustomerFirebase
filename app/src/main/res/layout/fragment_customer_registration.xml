@@ -146,6 +146,7 @@
                 android:drawableStart="@drawable/ic_village"
                 android:drawablePadding="@dimen/margin_medium"
                 android:hint="@string/village"
+                android:inputType="text"
                 android:text="@={customerRegistration.customerVillage}"
                 android:textSize="@dimen/textsize_large" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -170,6 +171,7 @@
                 android:drawableStart="@drawable/ic_city"
                 android:drawablePadding="@dimen/margin_medium"
                 android:hint="@string/district"
+                android:inputType="text"
                 android:text="@={customerRegistration.customerDistrict}"
                 android:textSize="@dimen/textsize_large" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -217,6 +219,7 @@
                 android:drawablePadding="@dimen/margin_medium"
                 android:hint="@string/phone"
                 android:text="@={customerRegistration.customerMobile}"
+                android:inputType="number"
                 android:textSize="@dimen/textsize_large" />
         </com.google.android.material.textfield.TextInputLayout>
 

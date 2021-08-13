@@ -1,5 +1,6 @@
 package com.example.customerfirebase.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -48,6 +48,7 @@ class OrderDetailsFragment : Fragment(), OrderAdapter.OnClickListener {
 
     }
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,7 +65,7 @@ class OrderDetailsFragment : Fragment(), OrderAdapter.OnClickListener {
 
         navController = findNavController()
 
-        var b: Bundle? = this.arguments
+        val b: Bundle? = this.arguments
         customerDetails = b?.getParcelable("CustomerDetailsArgs")!!
 
         binding.customerDetails = CustomerRegisterViewModel(customerDetails)
@@ -100,7 +101,7 @@ class OrderDetailsFragment : Fragment(), OrderAdapter.OnClickListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.product_list_menu, menu);
+        inflater.inflate(R.menu.product_list_menu, menu)
 
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -155,7 +156,7 @@ class OrderDetailsFragment : Fragment(), OrderAdapter.OnClickListener {
     }
 
     private fun loadOrderList(viewModel: FirebaseViewModel) {
-        viewModel.orderList.observe(viewLifecycleOwner, Observer {
+        viewModel.orderList.observe(viewLifecycleOwner, {
             if (it != null) {
                 binding.mtvNoProductFound.visibility = View.GONE
                 binding.recyclerViewOrder.visibility = View.VISIBLE
@@ -177,12 +178,12 @@ class OrderDetailsFragment : Fragment(), OrderAdapter.OnClickListener {
 
 
     override fun onClick(orderDetails: OrderDetails) {
-
-        /* val action =
-             CustomerDetailFragmentDirections.actionCustomerDetailFragmentToProductDetailsFragment(
-                 productDetails)
-         findNavController().navigate(action)*/
-        Toast.makeText(context, orderDetails.productName, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, "Product Name : " + orderDetails.productName +
+                "\nCategory : " + orderDetails.productCategory +
+                "\nQuantity : " + orderDetails.productQuantity +
+                "\nPrice : " + orderDetails.productPrice +
+                "\nTotal : " + orderDetails.productTotal +
+                "\nOrder Date : " + orderDetails.productOrderDate, Toast.LENGTH_LONG).show()
     }
 
 
