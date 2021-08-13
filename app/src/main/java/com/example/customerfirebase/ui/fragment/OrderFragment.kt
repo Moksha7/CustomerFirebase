@@ -201,7 +201,7 @@ class OrderFragment : Fragment() {
 
 
             mbPurchase.setOnClickListener {
-                customerDetails?.let { it1 -> purchase(it1) }
+                customerDetails?.let { it1 -> purchase(it1, it) }
             }
         }
 
@@ -244,7 +244,7 @@ class OrderFragment : Fragment() {
         }
     }
 
-    fun purchase(customerDetails: FirestoreCustomerDetails) {
+    fun purchase(customerDetails: FirestoreCustomerDetails, it: View) {
         binding.apply {
             if (bottomSheetParent.metQuantity.text.toString().length.equals(0) && bottomSheetParent.metQuantity.text.trim()
                     .toString() == "0"
@@ -263,10 +263,10 @@ class OrderFragment : Fragment() {
 
             if (b) {
                 val productId = viewModel.productId.toString()
-                val productImage = viewModel.productUrl.toString()
+                val productImage = viewModel.productUrl
                 val productCategory = viewModel.productCategory
                 val customerId = viewModel.customerId
-                var productInsertDate = viewModel.productInsertDate
+                val productInsertDate = viewModel.productInsertDate
                 val productDeliveredDate = viewModel.productDeliveredDate
                 val productQuantity = bottomSheetParent.metQuantity.text.toString()
                 val productName = mtvProductName.text.toString()
@@ -276,22 +276,21 @@ class OrderFragment : Fragment() {
                 val productOrderDate =
                     (currentDate.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))).toString()
 
-                if (customerDetails != null) {
-                    firebaseViewModel.addOrderDetailsWithId(
-                        productId,
-                        productImage,
-                        productName,
-                        productCategory,
-                        productQuantity,
-                        productPrice,
-                        productTotal,
-                        customerId,
-                        productInsertDate,
-                        productDeliveredDate,
-                        productOrderDate,
-                        navController,
-                        customerDetails)
-                }
+                firebaseViewModel.addOrderDetailsWithId(
+                    productId,
+                    productImage,
+                    productName,
+                    productCategory,
+                    productQuantity,
+                    productPrice,
+                    productTotal,
+                    customerId,
+                    productInsertDate,
+                    productDeliveredDate,
+                    productOrderDate,
+                    navController,
+                    customerDetails,
+                    it)
 
             }
 

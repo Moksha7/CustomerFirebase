@@ -429,8 +429,10 @@ constructor(
         productOrderDate: String,
         navController: NavController,
         customerDetails: FirestoreCustomerDetails,
+        it: View,
     ) {
-
+        val progressDialog = showProgress(it)
+        handleProgress(progressDialog, false)
         firebaseFireStore.collection("ORDER")
             .orderBy("orderId", Query.Direction.DESCENDING).limit(1)
             .get()
@@ -451,7 +453,8 @@ constructor(
                         productDeliveredDate,
                         productOrderDate,
                         navController,
-                        customerDetails)
+                        customerDetails,
+                        progressDialog)
                 }
             }
         //addProductDetails(1000 ,name, category, quantity, price, total, customerId, customerDetails, navController)
@@ -475,6 +478,7 @@ constructor(
         productOrderDate: String,
         navController: NavController,
         customerDetails: FirestoreCustomerDetails,
+        progressDialog: AlertDialog,
     ) {
         val orderDetails = Order(orderId,
             productId,
@@ -493,7 +497,7 @@ constructor(
             .addOnCompleteListener {
                 Log.d(TAG,
                     "DocumentSnapshot Order Details successfully written!")
-                loadOrderDetails(orderId.toString(), customerDetails, navController)
+                loadOrderDetails(orderId.toString(), customerDetails, navController, progressDialog)
             }
             .addOnFailureListener { e ->
                 Log.d(TAG,
@@ -587,6 +591,7 @@ constructor(
         orderId: String,
         customerDetails: FirestoreCustomerDetails,
         navController: NavController,
+        progressDialog: AlertDialog,
     ) {
         val orderRef = firebaseFireStore.collection("ORDER")
         orderRef.get().addOnSuccessListener { documents ->
@@ -600,7 +605,8 @@ constructor(
                         val orderDetails = document.toObject(OrderDetails::class.java)
                         insertRemainderIntoFireStoreById(customerDetails,
                             orderDetails,
-                            navController)
+                            navController,
+                            progressDialog)
                     }
                 }
             }
@@ -618,6 +624,7 @@ constructor(
         customerDetails: FirestoreCustomerDetails,
         orderDetails: OrderDetails,
         navController: NavController,
+        progressDialog: AlertDialog,
     ) {
 
         firebaseFireStore.collection(REMAINDER)
@@ -630,7 +637,8 @@ constructor(
                     insertRemainderIntoFireStore(rid + 1,
                         customerDetails,
                         orderDetails,
-                        navController)
+                        navController,
+                        progressDialog)
                 }
             }
         //insertRemainderIntoFireStore(1000,customerDetails, productDetails,navController)
@@ -643,6 +651,7 @@ constructor(
         customerDetails: FirestoreCustomerDetails,
         orderDetails: OrderDetails,
         navController: NavController,
+        progressDialog: AlertDialog,
     ) {
         val calendar = Calendar.getInstance()
         System.out.println("Original = " + calendar.time)
@@ -683,6 +692,7 @@ constructor(
                 Log.d(TAG,
                     "DocumentSnapshot Remainder Details successfully written!")
                 getLatestRemainderIntoFireStore()
+                handleProgress(progressDialog, true)
                 navController.navigate(OrderFragmentDirections.actionOrderFragmentToCustomerDetailFragment(
                     customerDetails))
             }

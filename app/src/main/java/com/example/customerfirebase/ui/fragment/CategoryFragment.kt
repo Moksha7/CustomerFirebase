@@ -46,7 +46,7 @@ class CategoryFragment : Fragment(),
 
 
         binding.mbLoadProduct.setOnClickListener {
-            val category = binding.categorySpinner.selectedItem.toString()
+            binding.categorySpinner.selectedItem.toString()
             /* val action =
                  categoryId?.let { it1 ->
                      CategoryFragmentDirections.actionCategoryFragmentToProductFragment(category,

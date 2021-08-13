@@ -1,5 +1,6 @@
 package com.example.customerfirebase.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -8,7 +9,6 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -48,6 +48,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
     }
 
+    @SuppressLint("CommitPrefEdits")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,7 +72,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
         navController = findNavController()
 
-        var b: Bundle? = this.arguments
+        val b: Bundle? = this.arguments
         customerDetails = b?.getParcelable("CustomerDetailsArgs")!!
 
         binding.customerDetails = CustomerRegisterViewModel(customerDetails)
@@ -156,7 +157,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.product_list_menu, menu);
+        inflater.inflate(R.menu.product_list_menu, menu)
 
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -211,7 +212,7 @@ class CustomerDetailsFragment : Fragment(), Product1Adapter.OnClickListener {
     }
 
     private fun loadProductList(viewModel: FirebaseViewModel) {
-        viewModel.productList.observe(viewLifecycleOwner, Observer {
+        viewModel.productList.observe(viewLifecycleOwner, {
             if (it != null) {
                 // binding.mtvNoProductFound.visibility = View.GONE
                 binding.recyclerViewProduct.visibility = View.VISIBLE

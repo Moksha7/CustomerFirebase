@@ -100,7 +100,7 @@ class CustomerDetailFragment : Fragment() {
 
 
     class ChildFragmentStateAdapter(
-        private val fragment: Fragment,
+        fragment: Fragment,
         val customerDetailsArgs: FirestoreCustomerDetails,
     ) :
         FragmentStateAdapter(fragment) {
@@ -108,24 +108,24 @@ class CustomerDetailFragment : Fragment() {
         override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment {
-            var customerDetails: CustomerDetailsFragment = CustomerDetailsFragment()
-            var b: Bundle = Bundle()
+            val customerDetails = CustomerDetailsFragment()
+            val b = Bundle()
             val CUSTOMER_DETAILS = "CustomerDetailsArgs"
             b.putParcelable(CUSTOMER_DETAILS, customerDetailsArgs)
             customerDetails.arguments = b
 
 
-            var orderDetails = OrderDetailsFragment()
-            var bb: Bundle = Bundle()
+            val orderDetails = OrderDetailsFragment()
+            val bb = Bundle()
             val ORDER_DETAILS = "CustomerDetailsArgs"
             bb.putParcelable(ORDER_DETAILS, customerDetailsArgs)
             orderDetails.arguments = bb
 
-            var remainderDetails = RemainderListFragment()
-            var bbb: Bundle = Bundle()
+            val remainderDetails = RemainderListFragment()
+            val bbb = Bundle()
             val REMAINDER_DETAILS = "CustomerDetailsArgs"
             bb.putParcelable(REMAINDER_DETAILS, customerDetailsArgs)
-            remainderDetails.arguments = bb
+            remainderDetails.arguments = bbb
 
             return when (position) {
                 0 -> orderDetails
